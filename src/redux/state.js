@@ -1,6 +1,8 @@
-import rerender from "../render";
+//import rerender from "../render";
 
-
+const rerender = () => {
+  console.log('тут должно перерендериваться');
+}
 
 const posts = [
   {id: 1, message: "Life is beautiful!", likesCount: 15},
@@ -36,7 +38,7 @@ const state = {
 
 window.state = state;
 
-export const addPost = () => {
+export const addPost = (rerender) => {
   const message = {
     id: state.profilePage.posts.length + 1,
     message: state.profilePage.newPostText,
@@ -48,13 +50,12 @@ export const addPost = () => {
   rerender(state, addPost, newPostTextChange, newMessageTextChange);
 }
 
-export const newPostTextChange = (newText) => {
+export const newPostTextChange = (newText, rerender) => {
   state.profilePage.newPostText = newText;
-  console.log({newPostTextChange});
   rerender(state, addPost, newPostTextChange, newMessageTextChange);
 }
 
-export const newMessageTextChange = (newMessage) => {
+export const newMessageTextChange = (newMessage, rerender) => {
   state.dialogPage.newMessageText = newMessage;
   rerender(state, addPost, newPostTextChange, newMessageTextChange);
 }

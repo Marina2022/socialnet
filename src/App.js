@@ -9,7 +9,7 @@ import Music from "./components/music/Music";
 import News from "./components/news/News";
 
 
-const App = ({state, addPost, newPostTextChange, newMessageTextChange}) => {
+const App = ({state, addPost, newPostTextChange, newMessageTextChange, rerender}) => {
 
   return (
     <Router>
@@ -18,12 +18,17 @@ const App = ({state, addPost, newPostTextChange, newMessageTextChange}) => {
         <Navbar friends={state.navbarPage.friends} />
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/dialogs/*" element={<Dialogs state={state.dialogPage} newMessageTextChange={newMessageTextChange}/>}/>
+            <Route path="/dialogs/*"
+                   element={<Dialogs state={state.dialogPage}
+                   newMessageTextChange={newMessageTextChange}
+                   rerender={rerender}
+                   />}/>
             <Route path="/profile" element={<Profile
                 posts={state.profilePage.posts}
                 addPost={addPost}
                 newPostTextChange={newPostTextChange}
                 newPostText={state.profilePage.newPostText}
+                rerender={rerender}
               />}
             />
             <Route path="/news" element={<News/>}/>

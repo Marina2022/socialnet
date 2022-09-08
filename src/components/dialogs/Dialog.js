@@ -3,10 +3,9 @@ import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
 import {createRef} from "react";
 
-const Dialogs = ({state, newMessageTextChange}) => {
+const Dialogs = ({state, newMessageTextChange, rerender}) => {
   const sendMessage = () => {
-    alert(messageText.current.value);
-    newMessageTextChange('');
+    newMessageTextChange('', rerender);
   }
 
   const messageText = createRef();
@@ -17,7 +16,7 @@ const Dialogs = ({state, newMessageTextChange}) => {
 
   const onNewMessageChange = () => {
     const text = messageText.current.value;
-    newMessageTextChange(text);
+    newMessageTextChange(text, rerender);
   }
 
   return (
