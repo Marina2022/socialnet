@@ -1,51 +1,29 @@
 .app-wrapper {
-  padding: 10px;
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-areas:
+    padding: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-areas:
     "h h"
     "n c";
-  grid-template-rows: 60px 1fr;
-  grid-template-columns: 1fr 5fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-columns: 1fr 5fr;
 }
 
-.header {
-  grid-area: h;
+
+.app-wrapper-content {
+    grid-area: c;
+    padding-left: 20px;
 }
 
-.header img {
-  width: 60px;
-  padding: 3px 10px;
-}
-
-.nav {
-  grid-area: n;
-  background-color: beige;
-}
-
-.content {
-  grid-area: c;
-}
-
-.ava {
-  width: 100px;
-  height: 110px;
-  margin-right: 30px;
-}
-
-.content-upper-img {
-  width: 1000px;
-  height: 100px;
-  overflow: hidden;
-}
-
-.user-info {
-  display: flex;
-  padding: 20px;
-}
-
-.my-posts,
-posts-list {
-  padding-left: 20px;
+button {
+    background: #27aae1;
+    padding: 7px 25px;
+    border: none;
+    font-size: 14px;
+    color: #fff;
+    position: relative;
+    font-weight: 600;
+    outline: none;
+    border-radius: 30px;
 }

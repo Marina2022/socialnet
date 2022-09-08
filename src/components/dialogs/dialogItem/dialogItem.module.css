@@ -1,0 +1,24 @@
+.profilePhoto {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.name {
+    color: #27aae1;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.navLink {
+    text-decoration: none;
+
+}
+
+.contact {
+    margin: 20px;
+    margin-left: 40px;
+    border-bottom: 1px dotted #bce8f7;
+    padding-bottom: 10px;
+}

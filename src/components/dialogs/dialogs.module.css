@@ -1,0 +1,38 @@
+.dialogs {
+    background-color: azure;
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    border-radius: 10px;
+}
+
+.textarea {
+    border-radius: 4px;
+    color: #939598;
+    margin-right: 30px;
+
+}
+
+.sendMessageBlock {
+    margin-left: 20px;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+.dialogItems {
+    margin-top: 20px;
+}
+
+.dialog {
+
+}
+
+.message {
+    color: green;
+}
+
+.dialog.active {
+    color: crimson;
+}

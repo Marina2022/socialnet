@@ -1,0 +1,27 @@
+.right .chatItem {
+    margin-left: 100px;
+    background: rgba(141,198,63, .1);
+}
+
+.name {
+    color: #4d4d4d;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.chatItem {
+    width: 400px;
+    background: rgba(39, 170, 225, .1);
+    margin-right: 50px;
+    padding: 5px 10px;
+    position: relative;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.chatItemHeader {
+    border-bottom: 1px dotted #bce8f7;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
