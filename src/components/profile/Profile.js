@@ -1,7 +1,7 @@
 import MyPosts from "./myPosts/MyPosts";
 import ProfileInfo from "./profileInfo/ProfileInfo";
 
-const Profile = ({posts, addPost, newPostTextChange, newPostText, rerender}) => (
+const Profile = ({posts, addPost, newPostTextChange, newPostText}) => (
   <>
     <ProfileInfo />
     <MyPosts
@@ -9,7 +9,6 @@ const Profile = ({posts, addPost, newPostTextChange, newPostText, rerender}) => 
       addPost={addPost}
       newPostTextChange={newPostTextChange}
       newPostText={newPostText}
-      rerender={rerender}
     />
   </>
 );

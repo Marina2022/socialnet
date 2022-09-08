@@ -3,9 +3,10 @@ import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
 import {createRef} from "react";
 
-const Dialogs = ({state, newMessageTextChange, rerender}) => {
+const Dialogs = ({state, newMessageTextChange}) => {
   const sendMessage = () => {
-    newMessageTextChange('', rerender);
+    newMessageTextChange('');
+    console.log('message: ', messageText.current.value)
   }
 
   const messageText = createRef();
@@ -16,7 +17,7 @@ const Dialogs = ({state, newMessageTextChange, rerender}) => {
 
   const onNewMessageChange = () => {
     const text = messageText.current.value;
-    newMessageTextChange(text, rerender);
+    newMessageTextChange(text);
   }
 
   return (
@@ -29,7 +30,6 @@ const Dialogs = ({state, newMessageTextChange, rerender}) => {
         <textarea ref={messageText} className={s.textarea} value={newMessageText} onChange={onNewMessageChange}></textarea>
           <button onClick={sendMessage}>Publish</button>
         </div>
-
         {messageElements}
       </div>
     </div>

@@ -21,14 +21,12 @@ const App = ({state, addPost, newPostTextChange, newMessageTextChange, rerender}
             <Route path="/dialogs/*"
                    element={<Dialogs state={state.dialogPage}
                    newMessageTextChange={newMessageTextChange}
-                   rerender={rerender}
                    />}/>
             <Route path="/profile" element={<Profile
                 posts={state.profilePage.posts}
                 addPost={addPost}
                 newPostTextChange={newPostTextChange}
                 newPostText={state.profilePage.newPostText}
-                rerender={rerender}
               />}
             />
             <Route path="/news" element={<News/>}/>

@@ -1,6 +1,6 @@
 //import rerender from "../render";
 
-const rerender = () => {
+let rerenderEntireTree = () => {
   console.log('тут должно перерендериваться');
 }
 
@@ -38,7 +38,7 @@ const state = {
 
 window.state = state;
 
-export const addPost = (rerender) => {
+export const addPost = () => {
   const message = {
     id: state.profilePage.posts.length + 1,
     message: state.profilePage.newPostText,
@@ -47,17 +47,21 @@ export const addPost = (rerender) => {
   };
   state.profilePage.posts.push(message);
   state.profilePage.newPostText ='';
-  rerender(state, addPost, newPostTextChange, newMessageTextChange);
+  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
 }
 
-export const newPostTextChange = (newText, rerender) => {
+export const newPostTextChange = (newText) => {
   state.profilePage.newPostText = newText;
-  rerender(state, addPost, newPostTextChange, newMessageTextChange);
+  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
 }
 
-export const newMessageTextChange = (newMessage, rerender) => {
+export const newMessageTextChange = (newMessage) => {
   state.dialogPage.newMessageText = newMessage;
-  rerender(state, addPost, newPostTextChange, newMessageTextChange);
+  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
+}
+
+export const subscribe = (observer) => {
+  rerenderEntireTree = observer;
 }
 
 export default state;
