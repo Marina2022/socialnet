@@ -6,10 +6,8 @@ const isActive = ({isActive}) => isActive ? s.active + ' ' + s.link : s.link;
 const Navbar = ({friends}) => {
 
   const friendsElements = friends.map(f => {
-
-
     return (
-      <li className={s.friensItem}>
+      <li className={s.friensItem} key={f.id}>
         <img src={f.avatar} alt="" className={s.ava}/>
         <div className={s.name}>{f.name}</div>
       </li>

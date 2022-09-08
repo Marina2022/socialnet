@@ -1,6 +1,7 @@
 import rerender from "../render";
 
 
+
 const posts = [
   {id: 1, message: "Life is beautiful!", likesCount: 15},
   {id: 2, message: "go to school", likesCount: 20},
@@ -28,21 +29,34 @@ const friends =[
 ]
 
 const state = {
-  profilePage: {posts},
-  dialogPage: {messages, dialogs},
+  profilePage: {posts, newPostText: 'mara'},
+  dialogPage: {messages, dialogs, newMessageText:''},
   navbarPage: {friends},
 }
 
-export const addPost = (postMessage) => {
+window.state = state;
+
+export const addPost = () => {
   const message = {
     id: state.profilePage.posts.length + 1,
-    message: postMessage,
+    message: state.profilePage.newPostText,
     likesCount: 0,
     date: "now"
   };
   state.profilePage.posts.push(message);
-  rerender(state);
+  state.profilePage.newPostText ='';
+  rerender(state, addPost, newPostTextChange, newMessageTextChange);
+}
 
+export const newPostTextChange = (newText) => {
+  state.profilePage.newPostText = newText;
+  console.log({newPostTextChange});
+  rerender(state, addPost, newPostTextChange, newMessageTextChange);
+}
+
+export const newMessageTextChange = (newMessage) => {
+  state.dialogPage.newMessageText = newMessage;
+  rerender(state, addPost, newPostTextChange, newMessageTextChange);
 }
 
 export default state;

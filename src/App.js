@@ -9,7 +9,7 @@ import Music from "./components/music/Music";
 import News from "./components/news/News";
 
 
-const App = ({state, addPost}) => {
+const App = ({state, addPost, newPostTextChange, newMessageTextChange}) => {
 
   return (
     <Router>
@@ -18,8 +18,14 @@ const App = ({state, addPost}) => {
         <Navbar friends={state.navbarPage.friends} />
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/dialogs/*" element={<Dialogs state={state.dialogPage}/>}/>
-            <Route path="/profile" element={<Profile posts={state.profilePage.posts} addPost={addPost}/>}/>
+            <Route path="/dialogs/*" element={<Dialogs state={state.dialogPage} newMessageTextChange={newMessageTextChange}/>}/>
+            <Route path="/profile" element={<Profile
+                posts={state.profilePage.posts}
+                addPost={addPost}
+                newPostTextChange={newPostTextChange}
+                newPostText={state.profilePage.newPostText}
+              />}
+            />
             <Route path="/news" element={<News/>}/>
             <Route path="/music" element={<Music/>}/>
             <Route path="/settings" element={<Settings/>}/>
