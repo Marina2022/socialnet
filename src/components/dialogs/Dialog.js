@@ -3,9 +3,9 @@ import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
 import {createRef} from "react";
 
-const Dialogs = ({state, newMessageTextChange}) => {
+const Dialogs = ({state, store}) => {
   const sendMessage = () => {
-    newMessageTextChange('');
+    store.newMessageTextChange('');
     console.log('message: ', messageText.current.value)
   }
 
@@ -17,7 +17,7 @@ const Dialogs = ({state, newMessageTextChange}) => {
 
   const onNewMessageChange = () => {
     const text = messageText.current.value;
-    newMessageTextChange(text);
+    store.newMessageTextChange(text);
   }
 
   return (

@@ -1,24 +1,21 @@
-//import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-
-
-//import rerender from "./render"
-import state, {addPost, newMessageTextChange, newPostTextChange, subscribe} from "./redux/state";
+import store from "./redux/state";
 import React from "react";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const rerender  = (state, addPost, newPostTextChange, newMessageTextChange) => {
+const rerender = (store) => {
   root.render(
     <React.StrictMode>
-      <App state = {state} addPost={addPost} newPostTextChange={newPostTextChange} newMessageTextChange={newMessageTextChange}/>
+      <App store={store}
+      />
     </React.StrictMode>
   );
 }
 
-rerender(state, addPost, newPostTextChange, newMessageTextChange);
+rerender(store);
 
-subscribe(rerender);
+store.subscribe(rerender);
 
 

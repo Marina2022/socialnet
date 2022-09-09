@@ -2,19 +2,17 @@ import s from "./myPosts.module.css";
 import Post from "./post/Post";
 import {createRef} from "react";
 
-const MyPosts = ({posts, addPost:addPostFromIndex, newPostTextChange, newPostText}) => {
-
+const MyPosts = ({posts, store, newPostText}) => {
   const postText = createRef();
-
   const postElements = posts.map(post=><Post message={post.message} likesCount={post.likesCount} key={post.id}/>)
   const addPost = () => {
-    addPostFromIndex();
+    store.addPost();
   }
 
   const onPostChange = () => {
     //debugger;
     const text = postText.current.value;
-    newPostTextChange(text);
+    store.newPostTextChange(text);
   }
 
   return (

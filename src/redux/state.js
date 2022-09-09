@@ -1,8 +1,3 @@
-//import rerender from "../render";
-
-let rerenderEntireTree = () => {
-  console.log('тут должно перерендериваться');
-}
 
 const posts = [
   {id: 1, message: "Life is beautiful!", likesCount: 15},
@@ -30,38 +25,51 @@ const friends =[
   {id:4, name: "Dasha", avatar: "https://themified.com/friend-finder/images/users/user-3.jpg"},
 ]
 
-const state = {
-  profilePage: {posts, newPostText: 'mara'},
-  dialogPage: {messages, dialogs, newMessageText:''},
-  navbarPage: {friends},
-}
-
-window.state = state;
-
-export const addPost = () => {
+function addPost() {
   const message = {
-    id: state.profilePage.posts.length + 1,
-    message: state.profilePage.newPostText,
+    id: this._state.profilePage.posts.length + 1,
+    message: this._state.profilePage.newPostText,
     likesCount: 0,
     date: "now"
   };
-  state.profilePage.posts.push(message);
-  state.profilePage.newPostText ='';
-  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
+  this._state.profilePage.posts.push(message);
+  this._state.profilePage.newPostText ='';
+  this._subscriber(this);
 }
 
-export const newPostTextChange = (newText) => {
-  state.profilePage.newPostText = newText;
-  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
+function newPostTextChange(newText) {
+  this._state.profilePage.newPostText = newText;
+  this._subscriber(this);
 }
 
-export const newMessageTextChange = (newMessage) => {
-  state.dialogPage.newMessageText = newMessage;
-  rerenderEntireTree(state, addPost, newPostTextChange, newMessageTextChange);
+function newMessageTextChange (newMessage) {
+  this._state.dialogPage.newMessageText = newMessage;
+  this._subscriber(this);
 }
 
-export const subscribe = (observer) => {
-  rerenderEntireTree = observer;
+const store = {
+  _state: {
+    profilePage: {posts, newPostText: 'mara'},
+    dialogPage: {messages, dialogs, newMessageText:''},
+    navbarPage: {friends},
+  },
+  getState() {
+  return this._state;
+},
+  setState(state) {
+  this._state = state;
+  },
+  _subscriber() {
+    console.log('тут должно перерендериваться');
+  },
+  subscribe (observer) {
+    this._subscriber = observer;
+  },
+  addPost,
+  newPostTextChange,
+  newMessageTextChange,
 }
 
-export default state;
+window.state = store.getState();
+
+export default store;
