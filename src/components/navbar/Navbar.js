@@ -7,7 +7,7 @@ const Navbar = ({friends}) => {
 
   const friendsElements = friends.map(f => {
     return (
-      <li className={s.friensItem} key={f.id}>
+      <li className={s.friendsItem} key={f.id}>
         <img src={f.avatar} alt="" className={s.ava}/>
         <div className={s.name}>{f.name}</div>
       </li>

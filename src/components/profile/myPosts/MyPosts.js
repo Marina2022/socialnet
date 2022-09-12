@@ -1,18 +1,14 @@
 import s from "./myPosts.module.css";
 import Post from "./post/Post";
-import {createRef} from "react";
 
-const MyPosts = ({posts, store, newPostText}) => {
-  const postText = createRef();
+const MyPosts = ({postChange, addPost, newPostText, posts}) => {
   const postElements = posts.map(post=><Post message={post.message} likesCount={post.likesCount} key={post.id}/>)
-  const addPost = () => {
-    store.addPost();
+  const onAddPost = () => {
+    addPost();
   }
-
-  const onPostChange = () => {
-    //debugger;
-    const text = postText.current.value;
-    store.newPostTextChange(text);
+  const onPostChange = (e) => {
+    const text = e.target.value;
+    postChange(text);
   }
 
   return (
@@ -20,9 +16,9 @@ const MyPosts = ({posts, store, newPostText}) => {
       <h2>My posts</h2>
       <div className={s.newPost}>
         <h3>New post</h3>
-        <textarea ref={postText} onChange={onPostChange} value={newPostText}/>
+        <textarea onChange={onPostChange} value={newPostText}/>
         <div>
-          <button onClick={addPost}>New</button>
+          <button onClick={onAddPost}>New</button>
         </div>
       </div>
       <ul className={s.postsList}>
