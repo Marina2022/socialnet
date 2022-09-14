@@ -1,24 +1,28 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
-//import store from "./redux/state";
 import store from "./redux/redux-state";
 import React from "react";
 import App from "./App";
 import {BrowserRouter as Router} from "react-router-dom";
+import {Provider} from "react-redux";
+
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const rerender = (state) => {
+const rerender = () => {
   root.render(
     <Router>
-      <React.StrictMode>
-        <App store={store}/>
-      </React.StrictMode>
+      {/*<React.StrictMode>*/}
+        <Provider store={store}>
+          <App />
+        </Provider>
+      {/*</React.StrictMode>*/}
     </Router>
   );
 }
 
-rerender(store.getState());
+rerender();
 
-store.subscribe(()=>rerender(store.getState()));
+//store.subscribe(()=>rerender());
 
 

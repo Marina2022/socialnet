@@ -4,7 +4,6 @@ import {NavLink} from "react-router-dom";
 const isActive = ({isActive}) => isActive ? s.active + ' ' + s.link : s.link;
 
 const Navbar = ({friends}) => {
-
   const friendsElements = friends.map(f => {
     return (
       <li className={s.friendsItem} key={f.id}>
@@ -19,6 +18,11 @@ const Navbar = ({friends}) => {
         <li className={s.item}>
           <NavLink to="/profile" className={isActive}>
             Profile
+          </NavLink>
+        </li>
+        <li className={s.item}>
+          <NavLink to="/users" className={isActive}>
+            Users
           </NavLink>
         </li>
         <li className={s.item}>

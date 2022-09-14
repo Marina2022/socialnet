@@ -1,0 +1,41 @@
+.user {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.photoBlock img {
+    width: 100px;
+    border-radius: 10px;
+    }
+
+.descBlock {
+    padding: 10px 20px;
+    margin-left: 20px;
+    border-radius: 10px;
+    border:  #bce8f7 solid 2px;
+    flex-grow: 1;
+}
+
+.df {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.userBtn {
+margin-bottom: 20px;
+}
+.userBtn:active {
+    background-color: #bce8f7;
+}
+
+.userBtn:last-child {
+    margin-bottom: 0;
+}
+
+
