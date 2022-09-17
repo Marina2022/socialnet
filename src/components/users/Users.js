@@ -1,43 +1,21 @@
 import styles from './users.module.css'
-import * as axios from 'axios';
 import mockPhoto from '../../assets/1.jpg';
 import React from 'react';
 
-class Users extends React.Component{
-  componentDidMount() {
-    if (this.props.users.length === 0) {
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${this.props.currentPage}`)
-        .then(response => {
-          this.props.setUsers(response.data.items);
-          this.props.setTotalPageCount(Math.ceil(response.data.totalCount / this.props.pageCount));
-        });
-    }
-  }
-
-  onPageClick = (page)=> {
-    this.props.setCurrentPage(page);
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${page}`)
-  .then(response => {
-      this.props.setUsers(response.data.items);
-    });
-  }
-
-
-  render = () => {
-    const {currentPage, totalPageCount, users, follow, unfollow} = this.props;
+const Users  = (props) => {
+    const {currentPage, totalPageCount, users, follow, unfollow, onPageClick} = props;
     let firstPage, lastPage, showRightPoints = true, showLeftPoints  = true;
     if (currentPage < 5) {
       firstPage = 2;
       lastPage = 6;
       showLeftPoints = false;
+    } else if  (currentPage > totalPageCount - 5) {
+      firstPage = totalPageCount - 6;
+      lastPage = totalPageCount -1;
+      showRightPoints = false;
     } else {
       firstPage = currentPage - 2;
       lastPage = currentPage + 2;
-    }
-    if (currentPage > totalPageCount-5) {
-      firstPage = currentPage - 6;
-      lastPage = currentPage-1;
-      showRightPoints = false;
     }
 
     const pageArray = [];
@@ -47,16 +25,30 @@ class Users extends React.Component{
 
     return <div>
       <div className={styles.pagination}>
-
-        <span className={currentPage === 1 ? styles.active + ' ' + styles.pagItem : styles.pagItem} >1</span>{showLeftPoints? "..." : ''}
-
+        <span
+          onClick={()=> onPageClick(1)}
+          className={currentPage === 1 ?
+            styles.active + ' ' + styles.pagItem
+            : styles.pagItem} >1</span>
+        {showLeftPoints? "..." : ''}
 
         {pageArray.map(p=>
-          <span onClick={()=> this.onPageClick(p)} className={p===currentPage ? styles.active + ' ' + styles.pagItem : styles.pagItem} key={p} >{p}</span>)
+          <span
+            onClick={()=> onPageClick(p)}
+            className={p===currentPage ? styles.active + ' ' + styles.pagItem : styles.pagItem}
+            key={p} >
+            {p}
+          </span>)
         }
+        {showRightPoints? "..." : ''}
 
+        <span
+          onClick={()=> onPageClick(totalPageCount)}
+          className={currentPage === totalPageCount
+            ? styles.active + ' ' + styles.pagItem
+            : styles.pagItem}>{totalPageCount}
+        </span>
 
-        {showRightPoints? "..." : ''}<span className={currentPage === totalPageCount ? styles.active + ' ' + styles.pagItem : styles.pagItem}>{totalPageCount}</span>
       </div>
       {users.map(u => <User
         user={u}
@@ -67,13 +59,12 @@ class Users extends React.Component{
       }
     </div>
   }
-}
+
 
 const User = ({user, follow}) => {
   const {name, followed, photos, status} = user;
   return (
     <>
-
       <div className={styles.user}>
         <div className={styles.photoBlock}>
           {photos.small === null ? <img src={mockPhoto} alt=""/> : <img src={photos.small} alt=""/>}
@@ -95,8 +86,6 @@ const User = ({user, follow}) => {
       </div>
       <button className={styles.userBtn} onClick={follow}>{followed ? 'Follow' : 'Unfollow'}</button>
     </>
-
-
   )
 }
 
