@@ -38,4 +38,20 @@ margin-bottom: 20px;
     margin-bottom: 0;
 }
 
+.pagination {
+    display: flex;
+    padding-bottom: 20px;
+}
 
+.pagItem {
+    cursor: pointer;
+    padding: 1px 6px ;
+    margin: 0 3px;
+    border-radius: 3px;
+    border: #27aae1 1px solid;
+}
+
+.pagItem.active {
+
+    font-weight: bold;
+}
