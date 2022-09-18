@@ -2,9 +2,9 @@ import ProfileInfo from "./profileInfo/ProfileInfo";
 import MyPostsContainer from "./myPosts/MyPostsContainer";
 
 
-const Profile = () => (
+const Profile = (props) => (
   <>
-    <ProfileInfo />
+    <ProfileInfo {...props} />
     <MyPostsContainer/>
   </>
 );

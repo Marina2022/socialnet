@@ -20,9 +20,7 @@ const rerender = () => {
     </Router>
   );
 }
-
 rerender();
 
-//store.subscribe(()=>rerender());
 
 
