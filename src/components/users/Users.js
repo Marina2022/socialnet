@@ -2,6 +2,7 @@ import styles from './users.module.css'
 import mockPhoto from '../../assets/1.jpg';
 import React from 'react';
 import {NavLink} from "react-router-dom";
+import axios from "axios";
 
 const Users = (props) => {
   const {currentPage, totalPageCount, users, follow, unfollow, onPageClick} = props;
@@ -24,8 +25,34 @@ const Users = (props) => {
     pageArray.push(i);
   }
 
-  return (
 
+  const followCallback = (id) => {
+    axios.post('https://social-network.samuraijs.com/api/1.0/follow/' + id, {},
+      {
+        withCredentials: true,
+        headers: {'API-KEY': '6291790e-1f79-4619-9324-d561afa90022',}
+      })
+      .then(response =>{
+        if (response.data.resultCode === 0) {
+          follow(id);
+        }
+      })
+  }
+
+  const unfollowCallback = (id) => {
+    console.log({id});
+    axios.delete('https://social-network.samuraijs.com/api/1.0/follow/' + id,
+      {
+        withCredentials: true, headers: {'API-KEY': '6291790e-1f79-4619-9324-d561afa90022',}
+      })
+      .then(response =>{
+        if (response.data.resultCode === 0) follow(id);
+      })
+  }
+
+
+
+  return (
     <div>
       <div className={styles.pagination}>
         <span
@@ -57,8 +84,8 @@ const Users = (props) => {
 
       {users.map(u => <User
         user={u}
-        follow={() => follow(u.id)}
-        unfollow={() => unfollow(u.id)}
+        follow={()=>followCallback(u.id)}
+        unfollow={()=>unfollowCallback(u.id)}
         key={u.id}
       />)
       }
@@ -67,7 +94,7 @@ const Users = (props) => {
 }
 
 
-const User = ({user, follow}) => {
+const User = ({user, follow, unfollow}) => {
   const {name, followed, photos, status, id} = user;
   return (
     <>
@@ -90,7 +117,7 @@ const User = ({user, follow}) => {
           </div>
         </div>
       </div>
-      <button className={styles.userBtn} onClick={follow}>{followed ? 'Follow' : 'Unfollow'}</button>
+      <button className={styles.userBtn} onClick={ followed ? unfollow : follow}>{followed ? 'Unfollow' : 'Follow'}</button>
     </>
   )
 }

@@ -1,8 +1,20 @@
 .header {
   grid-area: h;
+  display: flex;
+  justify-content: space-between;
+  background-color: #bce8f7;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+
 }
 
 .header img {
   width: 60px;
   padding: 3px 10px;
+
+}
+
+.login a {
+  color: black;
 }

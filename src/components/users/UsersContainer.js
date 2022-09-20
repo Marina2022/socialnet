@@ -6,11 +6,11 @@ import * as axios from "axios";
 import Preloader from "../common/preloader";
 
 class usersContainer extends React.Component {
-
   componentDidMount() {
     if (this.props.users.length === 0) {
       this.props.toggleIsFetching(true);
-      axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${this.props.currentPage}`)
+      axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${this.props.currentPage}`,
+        {withCredentials: true})
         .then(response => {
           this.props.setUsers(response.data.items);
           this.props.setTotalPageCount(Math.ceil(response.data.totalCount / this.props.pageCount));
@@ -23,7 +23,8 @@ class usersContainer extends React.Component {
     if (page === this.props.currentPage) return;
     this.props.setCurrentPage(page);
     this.props.toggleIsFetching(true);
-    axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${page}`)
+    axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageCount}&page=${page}`,
+      {withCredentials: true})
       .then(response => {
         this.props.setUsers(response.data.items);
         this.props.toggleIsFetching(false)
@@ -44,15 +45,6 @@ const mapStateToProps = (state) => ({
   totalPageCount: state.usersPage.totalPageCount,
   isFetching: state.usersPage.isFetching,
 });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   follow: (userId)=>dispatch(followAC(userId)),
-//   setUsers: (users)=>dispatch(setUsersAC(users)),
-//   setTotalPageCount: (totalCount)=>dispatch(setTotalPageCountAC(totalCount)),
-//   setCurrentPage: (page)=>dispatch(setCurrentPageAC(page)),
-//   toggleIsFetching: (isFetching)=>dispatch(toggleIsFetchingAC(isFetching)),
-// })
-//export default connect(mapStateToProps, mapDispatchToProps)(usersContainer);
 
 const objForConnect = {
   follow, setUsers, setTotalPageCount, setCurrentPage, toggleIsFetching,
