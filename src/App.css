@@ -18,7 +18,8 @@
 
 button {
     background: #27aae1;
-    padding: 7px 25px;
+    padding: 7px 0;
+    width: 95px;
     border: none;
     font-size: 14px;
     color: #fff;
@@ -26,4 +27,8 @@ button {
     font-weight: 600;
     outline: none;
     border-radius: 30px;
+}
+
+button:disabled {
+    background-color: #bce8f7;
 }

@@ -2,10 +2,19 @@ import styles from './users.module.css'
 import mockPhoto from '../../assets/1.jpg';
 import React from 'react';
 import {NavLink} from "react-router-dom";
-import axios from "axios";
+import usersApi from "../../api/api";
+
 
 const Users = (props) => {
-  const {currentPage, totalPageCount, users, follow, unfollow, onPageClick} = props;
+  const {
+    currentPage,
+    totalPageCount,
+    users,
+    follow,
+    onPageClick,
+    followingInProgress,
+    toggleFollowingInProgress
+  } = props;
   let firstPage, lastPage, showRightPoints = true, showLeftPoints = true;
   if (currentPage < 5) {
     firstPage = 2;
@@ -27,31 +36,22 @@ const Users = (props) => {
 
 
   const followCallback = (id) => {
-    axios.post('https://social-network.samuraijs.com/api/1.0/follow/' + id, {},
-      {
-        withCredentials: true,
-        headers: {'API-KEY': '6291790e-1f79-4619-9324-d561afa90022',}
-      })
-      .then(response =>{
-        if (response.data.resultCode === 0) {
-          follow(id);
-        }
+    toggleFollowingInProgress(true, id);
+    usersApi.follow(id)
+      .then(data => {
+        if (data.resultCode === 0) follow(id);
+        toggleFollowingInProgress(false, id);
       })
   }
 
   const unfollowCallback = (id) => {
-    console.log({id});
-    axios.delete('https://social-network.samuraijs.com/api/1.0/follow/' + id,
-      {
-        withCredentials: true, headers: {'API-KEY': '6291790e-1f79-4619-9324-d561afa90022',}
-      })
-      .then(response =>{
-        if (response.data.resultCode === 0) follow(id);
+    toggleFollowingInProgress(true, id);
+    usersApi.unfollow(id)
+      .then(data => {
+        if (data.resultCode === 0) follow(id);
+        toggleFollowingInProgress(false, id);
       })
   }
-
-
-
   return (
     <div>
       <div className={styles.pagination}>
@@ -67,7 +67,7 @@ const Users = (props) => {
             onClick={() => onPageClick(p)}
             className={p === currentPage ? styles.active + ' ' + styles.pagItem : styles.pagItem}
             key={p}
-            >
+          >
             {p}
           </span>)
         }
@@ -84,8 +84,9 @@ const Users = (props) => {
 
       {users.map(u => <User
         user={u}
-        follow={()=>followCallback(u.id)}
-        unfollow={()=>unfollowCallback(u.id)}
+        follow={() => followCallback(u.id)}
+        unfollow={() => unfollowCallback(u.id)}
+        followingInProgress={followingInProgress}
         key={u.id}
       />)
       }
@@ -94,13 +95,14 @@ const Users = (props) => {
 }
 
 
-const User = ({user, follow, unfollow}) => {
+const User = ({user, follow, unfollow, followingInProgress}) => {
   const {name, followed, photos, status, id} = user;
   return (
     <>
       <div className={styles.user}>
         <div className={styles.photoBlock}>
-          <NavLink to={`/profile/${id}`}>{photos.small === null ? <img src={mockPhoto} alt=""/> : <img src={photos.small} alt=""/>}</NavLink>
+          <NavLink to={`/profile/${id}`}>{photos.small === null ? <img src={mockPhoto} alt=""/> :
+            <img src={photos.small} alt=""/>}</NavLink>
         </div>
         <div className={styles.descBlock + ' ' + styles.df}>
           <div>
@@ -117,7 +119,9 @@ const User = ({user, follow, unfollow}) => {
           </div>
         </div>
       </div>
-      <button className={styles.userBtn} onClick={ followed ? unfollow : follow}>{followed ? 'Unfollow' : 'Follow'}</button>
+
+      <button disabled={followingInProgress.some(followId => followId === id)} className={styles.userBtn}
+              onClick={followed ? unfollow : follow}>{followed ? 'Unfollow' : 'Follow'}</button>
     </>
   )
 }
