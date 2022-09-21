@@ -1,7 +1,7 @@
 import {
   follow,
   setCurrentPage,
-  toggleFollowingInProgress, getUsers
+  toggleFollowingInProgress, getUsers, unfollow
 } from "../../redux/users-reducer";
 import {connect} from "react-redux";
 import Users from "./Users";
@@ -38,7 +38,7 @@ const mapStateToProps = (state) => ({
 });
 
 const objForConnect = {
-  follow, setCurrentPage, toggleFollowingInProgress, getUsers
+  follow, toggleFollowingInProgress, setCurrentPage, getUsers, unfollow
 }
 
 

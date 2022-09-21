@@ -2,7 +2,7 @@ import styles from './users.module.css'
 import mockPhoto from '../../assets/1.jpg';
 import React from 'react';
 import {NavLink} from "react-router-dom";
-import usersApi from "../../api/api";
+
 
 
 const Users = (props) => {
@@ -11,9 +11,9 @@ const Users = (props) => {
     totalPageCount,
     users,
     follow,
+    unfollow,
     onPageClick,
     followingInProgress,
-    toggleFollowingInProgress
   } = props;
   let firstPage, lastPage, showRightPoints = true, showLeftPoints = true;
   if (currentPage < 5) {
@@ -34,24 +34,6 @@ const Users = (props) => {
     pageArray.push(i);
   }
 
-
-  const followCallback = (id) => {
-    toggleFollowingInProgress(true, id);
-    usersApi.follow(id)
-      .then(data => {
-        if (data.resultCode === 0) follow(id);
-        toggleFollowingInProgress(false, id);
-      })
-  }
-
-  const unfollowCallback = (id) => {
-    toggleFollowingInProgress(true, id);
-    usersApi.unfollow(id)
-      .then(data => {
-        if (data.resultCode === 0) follow(id);
-        toggleFollowingInProgress(false, id);
-      })
-  }
   return (
     <div>
       <div className={styles.pagination}>
@@ -84,8 +66,8 @@ const Users = (props) => {
 
       {users.map(u => <User
         user={u}
-        follow={() => followCallback(u.id)}
-        unfollow={() => unfollowCallback(u.id)}
+        follow={() => follow(u.id)}
+        unfollow={() => unfollow(u.id)}
         followingInProgress={followingInProgress}
         key={u.id}
       />)

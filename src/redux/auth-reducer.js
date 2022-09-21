@@ -1,3 +1,5 @@
+import usersApi from "../api/api";
+
 const SET_CURRENT_USER = 'SET-CURRENT-USER';
 
 const initialState = {
@@ -21,5 +23,11 @@ const authReducer = (state = initialState, action) => {
 }
 
 export const setCurrentUser = (id, login, email) => ({type: SET_CURRENT_USER, data: {id, login, email}})
+
+export const getAuth = () => (dispatch)=> usersApi.getAuth()
+  .then(data=>{
+    const {id, login, email} = data.data
+    if(data.data.login) dispatch(setCurrentUser(id, login, email));
+  })
 
 export default authReducer;

@@ -50,7 +50,7 @@ const usersReducer = (state = initialState, action) => {
 
 
 export const setUsers = (users) => ({type: 'SET-USERS', users});
-export const follow = (userId) => ({type: 'FOLLOW', userId})
+export const followSuccess = (userId) => ({type: 'FOLLOW', userId})
 export const setTotalPageCount = (totalCount) => ({type: SET_TOTAL_PAGE_COUNT, totalCount})
 export const setCurrentPage = (page) => ({type: SET_CURRENT_PAGE, page})
 export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFetching})
@@ -68,5 +68,26 @@ export const getUsers = (pageCount, currentPage) => {
   }
 }
 
+export const follow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true, userId));
+    usersApi.follow(userId)
+      .then(data => {
+        if (data.resultCode === 0) dispatch(followSuccess(userId));
+        dispatch(toggleFollowingInProgress(false, userId));
+      })
+  }
+}
+
+export const unfollow = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleFollowingInProgress(true, userId));
+    usersApi.unfollow(userId)
+      .then(data => {
+        if (data.resultCode === 0) dispatch(followSuccess(userId));
+        dispatch(toggleFollowingInProgress(false, userId));
+      })
+  }
+}
 
 export default usersReducer;
