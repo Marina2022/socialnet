@@ -1,48 +1,27 @@
 import {addMessageActionCreator, newMessageTextChangeActionCreator} from "../../redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
+import withAuth from "../HOCs/authHOC";
 
-// import StoreContext from "../../storeContext";
+// const mapStateToProps2 = (state)=>({
+//   isAuth: state.auth.isAuth
+// })
 
-// const DialogsContainer = () => {
-//   return (
-//     <StoreContext.Consumer>
-//       {
-//         (store)=>{
-//
-//           const sendMessage = () => {
-//             store.dispatch(addMessageActionCreator())
-//           }
-//
-//           const {messages, dialogs, newMessageText} = store.getState().dialogsPage;
-//           const newMessageChange = (text) => {
-//             store.dispatch(newMessageTextChangeActionCreator(text));
-//           }
-//           return (
-//             <Dialogs
-//               sendMessage={sendMessage}
-//               newMessageChange={newMessageChange}
-//               messages={messages}
-//               dialogs={dialogs}
-//               newMessageText={newMessageText}/>
-//           )
-//         }
-//       }
-//     </StoreContext.Consumer>
-//   )
-// }
 
 const mapStateToProps = (state)=>({
   messages: state.dialogsPage.messages,
   dialogs: state.dialogsPage.dialogs,
   newMessageText: state.dialogsPage.newMessageText,
+  isAuth: state.auth.isAuth
 })
+
 
 const mapDispatchToProps = (dispatch) => ({
   sendMessage: ()=> dispatch(addMessageActionCreator()),
   newMessageChange: (text)=> dispatch(newMessageTextChangeActionCreator(text)),
 })
 
-const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
+
+const DialogsContainer = (connect(mapStateToProps, mapDispatchToProps)(withAuth(Dialogs)));
 
 export default DialogsContainer;
