@@ -1,7 +1,9 @@
 import styles from "./profileInfo.module.css";
 import Preloader from "../../common/preloader";
+import ProfileStatus from "./ProfileStatus";
 
 const ProfileInfo = (props) => {
+
   if (!props.profile) return <Preloader/>
   const {aboutMe, fullName, photos: {large: largePhoto}} = props.profile
   return (
@@ -24,7 +26,7 @@ const ProfileInfo = (props) => {
           <div>Date of Birth: 9 June</div>
           <div>City: Kirov</div>
           <div>About me: {aboutMe}</div>
-          <div>WebSite: marsite.ru</div>
+          <ProfileStatus  me={props.me} updateStatus={props.updateStatus} status={props.status}/>
         </div>
       </div>
     </>

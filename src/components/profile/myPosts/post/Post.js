@@ -1,7 +1,6 @@
 import s from "./post.module.css";
 
 const Post = (props) => {
-  //debugger;
   return (
     <li className={s.item}>
       <img

@@ -8,21 +8,11 @@ const instance = axios.create({
   }
 })
 
-const usersApi = {
+export const usersApi = {
 
   getUsers(pageCount, currentPage) {
     return instance.get
     (`users?count=${pageCount}&page=${currentPage}`)
-      .then(response => response.data)
-  },
-
-  getUser(userId) {
-    return instance.get(`profile/` + userId)
-      .then(response => response.data)
-  },
-
-  getAuth(){
-    return instance.get(`auth/me`)
       .then(response => response.data)
   },
 
@@ -38,4 +28,34 @@ const usersApi = {
 
 
 }
-export default usersApi;
+
+export const authApi = {
+  getAuth() {
+    return instance.get(`auth/me`)
+      .then(response => response.data)
+  },
+
+  authorize(formData) {
+    return instance.post('/auth/login', formData)
+      .then(response => response.data)
+  }
+
+}
+
+export const profileApi = {
+
+  getUser(userId) {
+    return instance.get(`profile/` + userId)
+      .then(response => response.data)
+  },
+
+  getStatus(userId) {
+    return instance.get(`profile/status/` + userId)
+      .then(response => response.data)
+  },
+
+  updateStatus(status) {
+    return instance.put('profile/status', {status: status})
+      .then(response => response.data)
+  }
+}

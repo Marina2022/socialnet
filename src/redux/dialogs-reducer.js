@@ -14,7 +14,6 @@ const initialState = {
     {id: 4, name: "Dasha", avatar: "https://themified.com/friend-finder/images/users/user-3.jpg"},
     {id: 5, name: "Alena", avatar: "https://themified.com/friend-finder/images/users/user-2.jpg"},
   ],
-  newMessageText: '',
 }
 
 const dialogsReducer = (state = initialState, action) => {
@@ -23,21 +22,17 @@ const dialogsReducer = (state = initialState, action) => {
       const me = Boolean((state.messages.length + 1) % 2);
       const message = {
         id: state.messages.length + 1,
-        message: state.newMessageText,
+         message: action.text,
         me: me,
         name: me ? "Marina I." : "Dima",
         date: "now"
       };
-            state.newMessageText = '';
       return {...state, newMessageText: '', messages: [...state.messages, message] };
-    case (NEW_MESSAGE_TEXT_CHANGE):
-      return {...state, newMessageText:action.text};
     default:
       return state;
   }
 }
 
-export const addMessageActionCreator = () => ({type: ADD_MESSAGE});
-export const newMessageTextChangeActionCreator = (text) => ({type: NEW_MESSAGE_TEXT_CHANGE, text: text})
+export const addMessageActionCreator = (text) => ({type: ADD_MESSAGE, text: text});
 
 export default dialogsReducer;

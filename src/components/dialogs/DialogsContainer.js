@@ -1,7 +1,9 @@
-import {addMessageActionCreator, newMessageTextChangeActionCreator} from "../../redux/dialogs-reducer";
+import {addMessageActionCreator} from "../../redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
 import withAuth from "../HOCs/authHOC";
+import {compose} from 'redux'
+
 
 // const mapStateToProps2 = (state)=>({
 //   isAuth: state.auth.isAuth
@@ -17,11 +19,13 @@ const mapStateToProps = (state)=>({
 
 
 const mapDispatchToProps = (dispatch) => ({
-  sendMessage: ()=> dispatch(addMessageActionCreator()),
-  newMessageChange: (text)=> dispatch(newMessageTextChangeActionCreator(text)),
+  sendMessage: (text)=> dispatch(addMessageActionCreator(text)),
 })
 
+const ComposedDialogsContainer = compose(connect(mapStateToProps, mapDispatchToProps),
+  // withAuth
+)(Dialogs)
 
-const DialogsContainer = (connect(mapStateToProps, mapDispatchToProps)(withAuth(Dialogs)));
-
-export default DialogsContainer;
+// const DialogsContainer = (connect(mapStateToProps, mapDispatchToProps)(withAuth(Dialogs)));
+// export default DialogsContainer;
+export default ComposedDialogsContainer;

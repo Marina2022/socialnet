@@ -1,4 +1,4 @@
-import usersApi from "../api/api";
+import {authApi, usersApi} from "../api/api";
 
 const SET_CURRENT_USER = 'SET-CURRENT-USER';
 
@@ -24,10 +24,18 @@ const authReducer = (state = initialState, action) => {
 
 export const setCurrentUser = (id, login, email) => ({type: SET_CURRENT_USER, data: {id, login, email}})
 
-export const getAuth = () => (dispatch)=> usersApi.getAuth()
-  .then(data=>{
+export const getAuth = () => (dispatch) => authApi.getAuth()
+  .then(data => {
     const {id, login, email} = data.data
-    if(data.data.login) dispatch(setCurrentUser(id, login, email));
+    if (data.data.login) dispatch(setCurrentUser(id, login, email));
   })
+
+export const authorize = (formData) => (dispatch) => authApi.authorize(formData)
+
+  .then((data) => {
+    console.log(data.resultCode)
+    if (data.resultCode !== 0) getAuth()
+      }
+  )
 
 export default authReducer;
