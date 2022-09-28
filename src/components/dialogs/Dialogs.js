@@ -3,9 +3,13 @@ import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
 import {Navigate} from 'react-router-dom';
 import {Field, reduxForm} from "redux-form";
+import {maxLengthCreator, required} from "../common/form-controls/validators";
+import {Textarea} from "../common/form-controls/form-contols";
+
+const maxLength20 = maxLengthCreator(20);
 
 const Dialogs = (
-  {sendMessage, newMessageChange, messages, dialogs, newMessageText, isAuth}
+  {sendMessage, messages, dialogs, isAuth}
 ) => {
 
   // if (isAuth === false) return <Navigate to={'/login'}/>
@@ -37,11 +41,12 @@ const Dialogs = (
   )
 }
 
+
 const Form = (props) => {
   const {handleSubmit} = props;
   return (
     <form action="" onSubmit={handleSubmit} >
-    <Field name="text" component="textarea" className={s.textarea}      />
+    <Field name="text" component={Textarea} validate={[maxLength20, required]}   />
       <button>Publish</button>
     </form>
   )

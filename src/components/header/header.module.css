@@ -12,6 +12,10 @@
 .header img {
   width: 60px;
   padding: 3px 10px;
+}
+
+.logoutBtn {
+  margin-top: 5px;
 
 }
 

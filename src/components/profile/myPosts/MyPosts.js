@@ -1,9 +1,15 @@
 import s from "./myPosts.module.css";
 import Post from "./post/Post";
 import {Field, reduxForm} from "redux-form";
+import {Textarea} from "../../common/form-controls/form-contols";
+import {maxLengthCreator, required} from "../../common/form-controls/validators";
+
+const maxLength10 = maxLengthCreator(10);
 
 const MyPosts = ({addPost, posts}) => {
   const postElements = posts.map(post=><Post message={post.message} likesCount={post.likesCount} key={post.id}/>)
+
+
 
   const onAddPost = ({postText}) => {
     addPost(postText);
@@ -26,7 +32,7 @@ const MyPosts = ({addPost, posts}) => {
 
 const Form = ({handleSubmit}) => {
   return <form onSubmit={handleSubmit}>
-    <Field component="textarea" name="postText" />
+    <Field component={Textarea} name="postText" validate={[required, maxLength10]} />
     <div>
       <button>Add Post</button>
     </div>

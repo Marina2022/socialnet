@@ -38,6 +38,11 @@ export const authApi = {
   authorize(formData) {
     return instance.post('/auth/login', formData)
       .then(response => response.data)
+  },
+
+  logout() {
+    return instance.delete('auth/login')
+      .then(response=>response.data)
   }
 
 }
