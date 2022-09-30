@@ -23,8 +23,6 @@ const ProfileInfo = (props) => {
         />
         <div className={styles.description}>
           <h2 className={styles.fullName}>{fullName}</h2>
-          <div>Date of Birth: 9 June</div>
-          <div>City: Kirov</div>
           <div>About me: {aboutMe}</div>
           <ProfileStatus  me={props.me} updateStatus={props.updateStatus} status={props.status}/>
         </div>

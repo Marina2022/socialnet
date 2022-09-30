@@ -1,47 +1,55 @@
-import React  from 'react';
+import React, {useEffect, useState} from 'react';
+import styles from './profileInfo.module.css'
 
-class ProfileStatus extends React.Component {
-  state ={
-    editMode: false,
-    status: this.props.status
+const ProfileStatus = (props) => {
+  // state ={
+  //   editMode: false,
+  //   status: this.props.status
+  // }
+
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   if(prevProps !== this.props) {
+  //     this.setState({status: this.props.status})
+  //   }
+  // }
+  const [editMode, setEditMode] = useState(false);
+  const [status, setStatus] = useState(props.status)
+
+
+  useEffect(()=>{
+          setStatus(props.status)
+      }, [props.status])
+
+
+
+  const onStatusClick =() => {
+    if (!props.me) return;
+    setEditMode(true)
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if(prevProps !== this.props) {
-      this.setState({status: this.props.status})
-    }
+  const onInputBlur = () => {
+    props.updateStatus(status);
+    setEditMode(false)
   }
 
-  onStatusClick =() => {
-    if (!this.props.me) return;
-    this.setState({editMode: true})
+  const onInputChange = (e) => {
+    setStatus(e.target.value)
   }
-
-  onInputBlur = () => {
-    this.props.updateStatus(this.state.status);
-    this.setState({editMode: false})
-  }
-
-  onInputChange = (e) => {
-    this.setState({status: e.target.value})
-  }
-
-  render() {
 
     return (
       <div>
         <br/>
-        {this.state.editMode &&
+        {editMode &&
           <input
             autoFocus={true}
-            onChange={this.onInputChange}
-            onBlur={this.onInputBlur}
+            onChange={onInputChange}
+            onBlur={onInputBlur}
             type="text"
-            value={this.state.status}
+            value={status}
           ></input>
         }
-        {!this.state.editMode &&
-          <div  onClick={this.onStatusClick}>{this.props.status}</div>
+        {!editMode &&
+          <div className={styles.statusInput} onClick={onStatusClick}>{props.status}</div>
         }
 
 
@@ -49,7 +57,7 @@ class ProfileStatus extends React.Component {
       </div>
 
     )
-  }
+
 }
 
 

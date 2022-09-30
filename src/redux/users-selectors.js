@@ -1,6 +1,13 @@
+import {createSelector} from "reselect";
+
 export const getUsers = (state) => {
   return state.usersPage.users;
 }
+
+// export const getUsers = createSelector (getaaaUsers, (users)=>{
+//   return users.filter(u=>u.name.startsWith('K'))
+// })
+
 
 export const getPageCount = (state) => {
   return state.usersPage.pageCount;

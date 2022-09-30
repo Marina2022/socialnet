@@ -1,5 +1,6 @@
 import ProfileInfo from "./profileInfo/ProfileInfo";
 import MyPostsContainer from "./myPosts/MyPostsContainer";
+import Preloader from "../common/preloader";
 
 
 const Profile = (props) =>
@@ -9,7 +10,7 @@ const Profile = (props) =>
       <ProfileInfo {...props} />
       <MyPostsContainer/>
     </>)
-    else return <>ddd</>
+    else return <></>
 
 };
 export default Profile;
