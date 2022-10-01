@@ -16,17 +16,12 @@ const reducers = combineReducers({
   form: formReducer,
 })
 
-//const store = createStore(reducers, applyMiddleware(thunkMiddleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-//печалька, что верхнююне могу прицепить, оно как-то делалось через компоуз
 
-// const allFoo = compose(
-//   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-//   applyMiddleware(thunkMiddleware),
-//
-// )
+//const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
-const store = createStore(reducers, applyMiddleware(thunkMiddleware));
-//const store = createStore(reducers, allFoo);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
+
 
 
 export default store;

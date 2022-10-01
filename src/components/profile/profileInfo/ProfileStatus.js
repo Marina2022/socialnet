@@ -49,11 +49,8 @@ const ProfileStatus = (props) => {
           ></input>
         }
         {!editMode &&
-          <div className={styles.statusInput} onClick={onStatusClick}>{props.status}</div>
+          <span className={styles.statusInput} onClick={onStatusClick}>{props.status}</span>
         }
-
-
-
       </div>
 
     )

@@ -1,7 +1,7 @@
 import {usersApi} from "../api/api";
 
 const FOLLOW = 'FOLLOW';
-const SET_USERS = 'SET-USERS';
+const SET_USERS = 'auth/SET-USERS';
 const SET_TOTAL_PAGE_COUNT = 'SET-TOTAL-PAGE-COUNT';
 const SET_CURRENT_PAGE = 'SET-CURRENT-PAGE';
 const TOGGLE_IS_FETCHING = 'TOGGLE-IS-FETCHING';
@@ -9,7 +9,7 @@ const TOGGLE_FOLLOWING_PROGRESS = 'TOGGLE-FOLLOWING-PROGRESS';
 
 const initialState = {
   users: [],
-  currentPage: 4195,
+  currentPage: 2195,
   pageCount: 5,
   totalPageCount: 0,
   isFetching: false,
@@ -33,7 +33,6 @@ const usersReducer = (state = initialState, action) => {
 
     case SET_TOTAL_PAGE_COUNT:
       return {...state, totalPageCount: action.totalCount}
-
     case SET_CURRENT_PAGE:
       return {...state, currentPage: action.page}
     case TOGGLE_IS_FETCHING:
@@ -48,8 +47,7 @@ const usersReducer = (state = initialState, action) => {
   }
 }
 
-
-export const setUsers = (users) => ({type: 'SET-USERS', users});
+export const setUsers = (users) => ({type: SET_USERS, users});
 export const followSuccess = (userId) => ({type: 'FOLLOW', userId})
 export const setTotalPageCount = (totalCount) => ({type: SET_TOTAL_PAGE_COUNT, totalCount})
 export const setCurrentPage = (page) => ({type: SET_CURRENT_PAGE, page})
@@ -57,36 +55,30 @@ export const toggleIsFetching = (isFetching) => ({type: TOGGLE_IS_FETCHING, isFe
 export const toggleFollowingInProgress = (isFetching, id) => ({type: TOGGLE_FOLLOWING_PROGRESS, isFetching, id})
 
 export const requestUsers = (pageCount, currentPage) => {
-  return (dispatch) => {
-      dispatch(toggleIsFetching(true));
-      usersApi.getUsers(pageCount, currentPage)
-        .then(data => {
-          dispatch(setUsers(data.items));
-          dispatch(setTotalPageCount(Math.ceil(data.totalCount / pageCount)));
-          dispatch(toggleIsFetching(false))
-        })
+  return async (dispatch) => {
+    dispatch(toggleIsFetching(true));
+    const data = await usersApi.getUsers(pageCount, currentPage);
+        dispatch(setUsers(data.items));
+        dispatch(setTotalPageCount(Math.ceil(data.totalCount / pageCount)));
+        dispatch(toggleIsFetching(false))
   }
 }
 
 export const follow = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleFollowingInProgress(true, userId));
-    usersApi.follow(userId)
-      .then(data => {
-        if (data.resultCode === 0) dispatch(followSuccess(userId));
-        dispatch(toggleFollowingInProgress(false, userId));
-      })
+    const data = await usersApi.follow(userId);
+    if (data.resultCode === 0) dispatch(followSuccess(userId));
+    dispatch(toggleFollowingInProgress(false, userId));
   }
 }
 
 export const unfollow = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleFollowingInProgress(true, userId));
-    usersApi.unfollow(userId)
-      .then(data => {
-        if (data.resultCode === 0) dispatch(followSuccess(userId));
-        dispatch(toggleFollowingInProgress(false, userId));
-      })
+    const data = await usersApi.unfollow(userId);
+    if (data.resultCode === 0) dispatch(followSuccess(userId));
+    dispatch(toggleFollowingInProgress(false, userId));
   }
 }
 

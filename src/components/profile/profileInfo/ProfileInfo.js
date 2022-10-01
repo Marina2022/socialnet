@@ -2,10 +2,10 @@ import styles from "./profileInfo.module.css";
 import Preloader from "../../common/preloader";
 import ProfileStatus from "./ProfileStatus";
 
-const ProfileInfo = (props) => {
+const ProfileInfo = ({profile, me, updateStatus, status}) => {
 
-  if (!props.profile) return <Preloader/>
-  const {aboutMe, fullName, photos: {large: largePhoto}} = props.profile
+  if (!profile) return <Preloader/>
+  const {aboutMe, fullName, photos: {large: largePhoto}} = profile
   return (
     <>
       <div className={styles.upperImg}>
@@ -21,10 +21,10 @@ const ProfileInfo = (props) => {
           alt=""
           className={styles.ava}
         />
-        <div className={styles.description}>
+        <div>
           <h2 className={styles.fullName}>{fullName}</h2>
           <div>About me: {aboutMe}</div>
-          <ProfileStatus  me={props.me} updateStatus={props.updateStatus} status={props.status}/>
+          <ProfileStatus  me={me} updateStatus={updateStatus} status={status}/>
         </div>
       </div>
     </>

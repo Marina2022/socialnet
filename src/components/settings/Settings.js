@@ -14,7 +14,6 @@ const Settings = () => {
       <button onClick={back}>
         back
       </button>
-
     </div>
   )
 }
