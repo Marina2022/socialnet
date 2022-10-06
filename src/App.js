@@ -1,5 +1,4 @@
 import {Route, Routes} from 'react-router-dom'
-
 import "./App.css";
 import Settings from "./components/settings/Settings";
 import Music from "./components/music/Music";
