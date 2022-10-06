@@ -9,8 +9,8 @@ const TOGGLE_FOLLOWING_PROGRESS = 'TOGGLE-FOLLOWING-PROGRESS';
 
 const initialState = {
   users: [],
-  currentPage: 2195,
-  pageCount: 5,
+  currentPage: Math.ceil(Math.random()*4227),
+  pageCount: 15,
   totalPageCount: 0,
   isFetching: false,
   followingInProgress: [],

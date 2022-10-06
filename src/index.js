@@ -3,7 +3,7 @@ import "./index.css";
 import store from "./redux/redux-state";
 import React from "react";
 import App from "./App";
-import {BrowserRouter as Router} from "react-router-dom";
+import {HashRouter as Router} from "react-router-dom";
 import {Provider} from "react-redux";
 
 
@@ -11,7 +11,7 @@ import {Provider} from "react-redux";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const rerender = () => {
   root.render(
-    <Router>
+    <Router >
       {/*<React.StrictMode>*/}
         <Provider store={store}>
           <App />

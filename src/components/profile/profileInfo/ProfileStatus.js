@@ -38,7 +38,6 @@ const ProfileStatus = (props) => {
 
     return (
       <div>
-        <br/>
         {editMode &&
           <input
             autoFocus={true}
