@@ -1,5 +1,3 @@
-import Music from "../music/Music";
-
 const News = () => {
   return (
     <div>

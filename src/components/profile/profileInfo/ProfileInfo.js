@@ -39,7 +39,7 @@ const ProfileInfo = (props) => {
 
 const ProfileData = ({profile, me, updateStatus, status, updateAvatar, startProfileEditMode, isEditMode}) => {
 
-  const {aboutMe, fullName, lookingForAJob, lookingForAJobDescription, contacts} = profile
+  const {aboutMe, fullName, lookingForAJob, lookingForAJobDescription} = profile
   return <>
 
     <div >
@@ -48,12 +48,9 @@ const ProfileData = ({profile, me, updateStatus, status, updateAvatar, startProf
       <div><b>Looking for a job: </b>{lookingForAJob ? "yes" : "no"}</div>
       <div><b>My skills: </b>{lookingForAJobDescription}</div>
       <br/>
-      {/*<div><b>Contacts: </b></div>*/}
-      {/*<br/>*/}
       <div><b>Status: </b></div>
       <ProfileStatus me={me} updateStatus={updateStatus} status={status}/>
       <br/>
-      {/*{Object.keys(contacts).map((key) => <div key={key} className={styles.pl15}> <b>{key}:</b> {contacts[key]}</div>)}*/}
 
       <button className={styles.mt20} onClick={startProfileEditMode}>Edit</button>
     </div>

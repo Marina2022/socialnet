@@ -5,21 +5,15 @@ const SET_CURRENT_USER = 'SET-CURRENT-USER';
 const INIT = 'INIT';
 
 
-type InitialStateType = {
-    login: string | null,
-    userId: number | null,
-    email: string | null,
-    isAuth: boolean,
-    initialized: boolean
-}
-
-const initialState: InitialStateType = {
-    login: null,
-    userId: null,
-    email: null,
+const initialState = {
+    login: null as string | null,
+    userId: null as number | null,
+    email: null as string | null,
     isAuth: false,
     initialized: false
 }
+
+export type InitialStateType = typeof initialState;
 
 const authReducer = (state = initialState, action: any): InitialStateType => {
     switch (action.type) {
@@ -38,13 +32,25 @@ const authReducer = (state = initialState, action: any): InitialStateType => {
     }
 }
 
-export const setCurrentUser = (userId: number | null, login: string | null, email: string | null, isAuth: boolean) => ({
+type SetCurrentUserPayloadType = {
+    userId: number|null,
+    login: string|null ,
+    email: string|null,
+    isAuth: boolean
+}
+
+type SetCurrentUserActionType = {
+    type: typeof SET_CURRENT_USER,
+    data: SetCurrentUserPayloadType
+}
+
+export const setCurrentUser = (userId: number | null, login: string | null, email: string | null, isAuth: boolean):SetCurrentUserActionType => ({
     type: SET_CURRENT_USER,
     data: {userId, login, email, isAuth}
 })
 
-export const getAuth = () => (dispatch: any) => {
-    const data = authApi.getAuth();
+export const getAuth = () => async(dispatch: any) => {
+    const data = await authApi.getAuth();
     const {id, login, email} = data.data
     if (data.data.login) dispatch(setCurrentUser(id, login, email, true));
 }

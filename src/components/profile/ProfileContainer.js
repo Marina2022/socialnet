@@ -9,8 +9,7 @@ import {
   updateStatus,
   uploadProfileData
 } from "../../redux/profile-reducer";
-import {Navigate, useParams} from "react-router-dom";
-import withAuth from "../HOCs/authHOC";
+import {useParams} from "react-router-dom";
 import {compose} from "redux";
 import {createBrowserHistory} from 'history';
 

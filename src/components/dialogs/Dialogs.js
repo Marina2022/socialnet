@@ -1,7 +1,6 @@
 import s from "./dialogs.module.css"
 import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
-import {Navigate} from 'react-router-dom';
 import {Field, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../common/form-controls/validators";
 import {Textarea} from "../common/form-controls/form-contols";
@@ -11,8 +10,6 @@ const maxLength20 = maxLengthCreator(20);
 const Dialogs = (
   {sendMessage, messages, dialogs, isAuth}
 ) => {
-
-  // if (isAuth === false) return <Navigate to={'/login'}/>
 
   const onSendMessage = (props) => {
     sendMessage(props.text);

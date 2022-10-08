@@ -1,5 +1,3 @@
-import Music from "../music/Music";
-
 const back = () => {
   window.history.back();
 

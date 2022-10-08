@@ -1,14 +1,7 @@
 import {addMessageActionCreator} from "../../redux/dialogs-reducer";
 import Dialogs from "./Dialogs";
 import {connect} from "react-redux";
-import withAuth from "../HOCs/authHOC";
 import {compose} from 'redux'
-
-
-// const mapStateToProps2 = (state)=>({
-//   isAuth: state.auth.isAuth
-// })
-
 
 const mapStateToProps = (state)=>({
   messages: state.dialogsPage.messages,
@@ -16,7 +9,6 @@ const mapStateToProps = (state)=>({
   newMessageText: state.dialogsPage.newMessageText,
   isAuth: state.auth.isAuth
 })
-
 
 const mapDispatchToProps = (dispatch) => ({
   sendMessage: (text)=> dispatch(addMessageActionCreator(text)),

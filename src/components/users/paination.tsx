@@ -1,7 +1,13 @@
 import styles from "./users.module.css";
 import React from "react";
 
-const Pagination = (props) => {
+type PropsType = {
+    currentPage: number
+    totalPageCount: number
+    onPageClick: (pageNumber: number)=> void
+}
+
+const Pagination: React.FC<PropsType> = (props) => {
   const {currentPage, totalPageCount, onPageClick} = props;
   let firstPage, lastPage, showRightPoints = true, showLeftPoints = true;
   if (currentPage < 5) {
@@ -49,7 +55,6 @@ const Pagination = (props) => {
             ? styles.active + ' ' + styles.pagItem
             : styles.pagItem}>{totalPageCount}
         </span>
-
       </div>
     </div>
   )

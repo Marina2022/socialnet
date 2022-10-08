@@ -1,7 +1,6 @@
 import styles from "./profileInfo.module.css";
 import ProfileStatus from "./ProfileStatus";
 import {Field, reduxForm} from "redux-form";
-import handleSubmit from "redux-form/lib/handleSubmit";
 
 const ProfileForm = ({error, handleSubmit, profile, me, updateStatus, status, startProfileEditMode}) => {
   const {fullName} = profile
