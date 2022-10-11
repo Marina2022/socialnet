@@ -1,4 +1,11 @@
-import * as axios from "axios";
+import axios, {AxiosResponse} from "axios";
+
+export enum ResultCodeEnum {
+  success = 0,
+  error
+}
+
+
 
 const instance = axios.create({
   baseURL: 'https://social-network.samuraijs.com/api/1.0/',
@@ -9,61 +16,84 @@ const instance = axios.create({
 })
 
 export const usersApi = {
-  getUsers(pageCount, currentPage) {
+  getUsers(pageCount: number, currentPage: number) {
     return instance.get
     (`users?count=${pageCount}&page=${currentPage}`)
       .then(response => response.data)
   },
 
-  follow(id) {
+  follow(id: number) {
     return instance.post('follow/' + id)
       .then(response => response.data)
   },
 
-  unfollow(id) {
+  unfollow(id: number) {
     return instance.delete('follow/' + id)
       .then(response => response.data)
   }
-
-
 }
 
-export const authApi = {
-  getAuth() {
-    return instance.get(`auth/me`)
-      .then(response => response.data)
-  },
+type AuthDataType = {
+  data: {
+    id: number
+    login: string
+    email: string
+  }
+  resultCode: ResultCodeEnum
+  messages: Array<string>
+}
 
-  authorize(formData) {
-    return instance.post('/auth/login', formData)
+type LoginDataType = {
+  data: {
+    userId: number
+  }
+  resultCode: ResultCodeEnum
+  messages: Array<string>
+}
+
+
+type LogoutDataType = {
+  data: {
+  }
+  resultCode: ResultCodeEnum
+  messages: Array<string>
+}
+
+  export const authApi = {
+    getAuth() {
+      return instance.get<AuthDataType>(`auth/me`)
+          .then(response => response.data)
+    },
+
+
+  authorize(formData: {login: string, password: string}) {
+    return instance.post<LoginDataType>('/auth/login', formData)
       .then(response => response.data)
   },
 
   logout() {
-    return instance.delete('auth/login')
+    return instance.delete<LogoutDataType>('auth/login')
       .then(response=>response.data)
   }
-
 }
 
 export const profileApi = {
-
-  getUser(userId) {
+  getUser(userId: number) {
     return instance.get(`profile/` + userId)
       .then(response => response.data)
   },
 
-  getStatus(userId) {
+  getStatus(userId: number) {
     return instance.get(`profile/status/` + userId)
       .then(response => response.data)
   },
 
-  updateStatus(status) {
+  updateStatus(status: string) {
     return instance.put('profile/status', {status: status})
       .then(response => response.data)
   },
 
-  updateAvatar(file) {
+  updateAvatar(file: any) {
     const formData = new FormData();
     formData.append("image", file);
     return instance.put(
@@ -76,10 +106,10 @@ export const profileApi = {
     )
   },
 
-  uploadProfile(formData) {
+  uploadProfile(formData: any) {
     return instance.put('profile', formData)
       .then((data)=> {
-        if (data.data.resultCode!==0) return Promise.reject(data.data.messages[0])
+        if (data.data.resultCode!==ResultCodeEnum.success) return Promise.reject(data.data.messages[0])
       })
   }
 }

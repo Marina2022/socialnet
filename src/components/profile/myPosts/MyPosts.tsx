@@ -3,18 +3,22 @@ import Post from "./post/Post";
 import {Field, reduxForm} from "redux-form";
 import {Textarea} from "../../common/form-controls/form-contols";
 import {maxLengthCreator, required} from "../../common/form-controls/validators";
+import {PostType} from "../../../types/types";
+import React from "react";
 
 const maxLength10 = maxLengthCreator(10);
 
-const MyPosts = ({addPost, posts}) => {
+type MyPostPropsType = {
+    addPost: (post: string)=> void
+    posts: Array<PostType>
+}
+
+const MyPosts: React.FC<MyPostPropsType> = ({addPost, posts}) => {
   const postElements = posts.map(post=><Post message={post.message} likesCount={post.likesCount} key={post.id}/>)
 
-
-
-  const onAddPost = ({postText}) => {
-    addPost(postText);
+  const onAddPost = (formData: any) => {
+    addPost(formData.postText);
   }
-
 
   return (
     <div className={s.myPosts}>
@@ -30,6 +34,7 @@ const MyPosts = ({addPost, posts}) => {
   );
 }
 
+// @ts-ignore
 const Form = ({handleSubmit}) => {
   return <form onSubmit={handleSubmit}>
     <Field component={Textarea} name="postText" validate={[required, maxLength10]} />

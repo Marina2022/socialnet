@@ -1,5 +1,7 @@
-import {authApi} from "../api/api";
+import {authApi, ResultCodeEnum} from "../api/api";
 import {stopSubmit} from "redux-form";
+import {ThunkAction} from "redux-thunk";
+import {GlobalStateType} from "./redux-state";
 
 const SET_CURRENT_USER = 'SET-CURRENT-USER';
 const INIT = 'INIT';
@@ -15,7 +17,9 @@ const initialState = {
 
 export type InitialStateType = typeof initialState;
 
-const authReducer = (state = initialState, action: any): InitialStateType => {
+type ActionsType = SetCurrentUserActionType | setInitActionType
+
+const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
         case  SET_CURRENT_USER:
             return {
@@ -33,9 +37,9 @@ const authReducer = (state = initialState, action: any): InitialStateType => {
 }
 
 type SetCurrentUserPayloadType = {
-    userId: number|null,
-    login: string|null ,
-    email: string|null,
+    userId: number | null,
+    login: string | null,
+    email: string | null,
     isAuth: boolean
 }
 
@@ -43,45 +47,45 @@ type SetCurrentUserActionType = {
     type: typeof SET_CURRENT_USER,
     data: SetCurrentUserPayloadType
 }
-
-export const setCurrentUser = (userId: number | null, login: string | null, email: string | null, isAuth: boolean):SetCurrentUserActionType => ({
+export const setCurrentUser = (userId: number | null, login: string | null, email: string | null, isAuth: boolean): SetCurrentUserActionType => ({
     type: SET_CURRENT_USER,
     data: {userId, login, email, isAuth}
 })
 
-export const getAuth = () => async(dispatch: any) => {
+type setInitActionType = {
+    type: typeof INIT, payload: boolean
+}
+const setInit = (initialized: boolean): setInitActionType => ({type: INIT, payload: initialized});
+
+
+export const getAuth = () => async (dispatch: any) => {
     const data = await authApi.getAuth();
     const {id, login, email} = data.data
     if (data.data.login) dispatch(setCurrentUser(id, login, email, true));
 }
 
-type setInitActionType = {
-    type: typeof INIT, payload: boolean
+type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown,  ActionsType>
+//type ThunkType2 = ThunkAction<FormAction, GlobalStateType, unknown,  ActionsType>
+
+export const initialize = ():ThunkType => async (dispatch) => {
+    await dispatch(getAuth())
+    dispatch(setInit(true))
 }
 
-const setInit = (initialized: boolean): setInitActionType => ({type: INIT, payload: initialized});
-
-export const initialize = () => (dispatch: any) => {
-    dispatch(getAuth())
-        .then(() => {
-                dispatch(setInit(true));
-            }
-        )
-}
-
-export const authorize = (formData: any) => (dispatch: any) => {
-    const data = authApi.authorize(formData);
-    if (data.resultCode === 0) {
-        dispatch(getAuth());
+export const authorize = (formData: any):ThunkType => async (dispatch) => {
+    const data = await authApi.authorize(formData);
+    if (data.resultCode === ResultCodeEnum.success) {
+      await dispatch(getAuth());
     } else {
-        dispatch(stopSubmit("login", {_error: data.messages[0]}))
+        // фигня какая-то.. Похоже stopSubmit чего-то возвращает. и это чего-то должно попсатьв промис в описании фанка
+        // @ts-ignore
+        await dispatch(stopSubmit("login", {_error: data.messages[0]}))
     }
 }
 
-
-export const logout = () => async (dispatch: any) => {
+export const logout = ():ThunkType=> async (dispatch) => {
     const data = await authApi.logout();
-    if (data.resultCode === 0) {
+    if (data.resultCode === ResultCodeEnum.success) {
         dispatch(setCurrentUser(null, null, null, false))
     }
 }

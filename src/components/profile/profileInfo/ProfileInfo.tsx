@@ -3,14 +3,18 @@ import Preloader from "../../common/preloader";
 import ProfileStatus from "./ProfileStatus";
 import mockPhoto from "../../../assets/1.jpg";
 import ProfileForm from "./ProfileForm";
+import {ProfilePropsType} from "../Profile";
+import React from "react";
+import {ProfileType} from "../../../types/types";
 
-const ProfileInfo = (props) => {
+const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
   if (!props.profile) return <Preloader/>
 
-  const onAvatarChange = (e) => {
+  const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // @ts-ignore
     if (e.target.files[0]) props.updateAvatar(e.target.files[0]);
   }
-  return (
+    return (
     <div>
       <div className={styles.upperImg}>
         <img
@@ -21,6 +25,7 @@ const ProfileInfo = (props) => {
       <div className={styles.userInfo}>
         <div>
           <img
+              // @ts-ignore
             src={props.profile.photos.large || mockPhoto}
             alt=""
             className={styles.ava}
@@ -30,18 +35,28 @@ const ProfileInfo = (props) => {
           </div>}
         </div>
 
-        {!props.isEditMode ? <ProfileData {...props} /> : <ProfileForm initialValues={props.profile}  onSubmit={props.uploadProfileData}{...props} />}
+        {!props.isEditMode ? <ProfileData {...props} /> :
+            <ProfileForm
+                initialValues={props.profile}
+                onSubmit={props.uploadProfileData}{...props} />}
       </div>
     </div>
   )
 }
 
+type ProfileDataPropsType = {
+  profile: ProfileType
+  me: boolean
+  updateStatus: (status: string) => void
+  status: string
+  startProfileEditMode: ()=> void
+}
 
-const ProfileData = ({profile, me, updateStatus, status, updateAvatar, startProfileEditMode, isEditMode}) => {
+
+const ProfileData:React.FC<ProfileDataPropsType> = ({profile, me, updateStatus, status, startProfileEditMode}:ProfileDataPropsType) => {
 
   const {aboutMe, fullName, lookingForAJob, lookingForAJobDescription} = profile
   return <>
-
     <div >
       <h2 className={styles.fullName}>{fullName}</h2>
       <div><b>About me: </b>{aboutMe}</div>
@@ -51,7 +66,6 @@ const ProfileData = ({profile, me, updateStatus, status, updateAvatar, startProf
       <div><b>Status: </b></div>
       <ProfileStatus me={me} updateStatus={updateStatus} status={status}/>
       <br/>
-
       <button className={styles.mt20} onClick={startProfileEditMode}>Edit</button>
     </div>
   </>

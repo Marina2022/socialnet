@@ -1,3 +1,5 @@
+// Не удаляй, я его тестирую
+
 import React, {Component} from 'react';
 import styles from './profileInfo.module.css'
 

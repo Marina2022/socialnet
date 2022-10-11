@@ -33,7 +33,9 @@ const initialState = {
 
 type InitialStateType = typeof initialState;
 
-const dialogsReducer = (state = initialState, action: any):InitialStateType => {
+type ActionsType = addMessageActionCreatorType
+
+const dialogsReducer = (state = initialState, action: ActionsType):InitialStateType => {
   switch (action.type) {
     case (ADD_MESSAGE) :
       const me = Boolean((state.messages.length + 1) % 2);

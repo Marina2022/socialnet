@@ -1,7 +1,9 @@
 import styles from "./header.module.css";
 import {NavLink} from "react-router-dom";
+import {WholeHeaderProps} from "./HeaderContainer";
+import React from "react";
 
-const Header = (props) => {
+const Header: React.FC<WholeHeaderProps> = (props) => {
   return (
     <header className={styles.header}>
       <img

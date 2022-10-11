@@ -1,18 +1,24 @@
 import s from "./dialogs.module.css"
 import DialogItem from "./dialogItem/DialogItem";
 import Message from "./message/Message";
-import {Field, reduxForm} from "redux-form";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import {maxLengthCreator, required} from "../common/form-controls/validators";
 import {Textarea} from "../common/form-controls/form-contols";
+import {DialogDispatchProps, DialogMapStateProps} from "./DialogsContainer";
+import React from "react";
 
 const maxLength20 = maxLengthCreator(20);
 
-const Dialogs = (
-  {sendMessage, messages, dialogs, isAuth}
-) => {
+type PropsType = DialogMapStateProps & DialogDispatchProps
+type DialogFormNamesType = {
+  text: string
+}
 
-  const onSendMessage = (props) => {
-    sendMessage(props.text);
+const Dialogs: React.FC<PropsType> = (
+  {sendMessage, messages, dialogs}
+) => {
+  const onSubmit = (formData: DialogFormNamesType) => {
+    sendMessage(formData.text);
   }
   const messageElements = messages.map(m => <Message message={m} key={m.id}/>)
   const dialogElements = dialogs.map(dialog =>
@@ -22,7 +28,6 @@ const Dialogs = (
       avatar={dialog.avatar}
       key={dialog.id}/>)
 
-
   return (
     <div className={s.dialogs}>
       <div className={s.dialogItems}>
@@ -30,7 +35,7 @@ const Dialogs = (
       </div>
       <div>
         <div className={s.sendMessageBlock}>
-          <NewMessageForm onSubmit={onSendMessage}  />
+          <NewMessageForm onSubmit={onSubmit}  />
         </div>
         {messageElements}
       </div>
@@ -38,8 +43,7 @@ const Dialogs = (
   )
 }
 
-
-const Form = (props) => {
+const Form: React.FC<InjectedFormProps<DialogFormNamesType>> = (props) => {
   const {handleSubmit} = props;
   return (
     <form action="" onSubmit={handleSubmit} >
@@ -49,7 +53,6 @@ const Form = (props) => {
   )
 }
 
-
-const NewMessageForm = reduxForm({form: "newMessageForm"})(Form)
+const NewMessageForm = reduxForm<DialogFormNamesType>({form: "newMessageForm"})(Form)
 
 export default Dialogs;

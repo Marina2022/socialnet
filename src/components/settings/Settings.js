@@ -1,10 +1,8 @@
 const back = () => {
   window.history.back();
-
 }
 
 const Settings = () => {
-
   return (
     <div>
       Settings

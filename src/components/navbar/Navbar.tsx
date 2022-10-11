@@ -1,9 +1,15 @@
 import s from "./navbar.module.css";
 import {NavLink} from "react-router-dom";
+import React from "react";
+import {PropsType} from "./NavbarContainer";
 
-const isActive = ({isActive}) => isActive ? s.active + ' ' + s.link : s.link;
+type IsActiveFooTypeParamType = {
+  isActive: boolean;
+}
 
-const Navbar = ({friends}) => {
+const isActive = ({isActive}:IsActiveFooTypeParamType):string => isActive ? s.active + ' ' + s.link : s.link;
+
+const Navbar:React.FC<PropsType> = ({friends}:PropsType) => {
   const friendsElements = friends.map(f => {
     return (
       <li className={s.friendsItem} key={f.id}>

@@ -16,12 +16,18 @@ const reducers = combineReducers({
   form: formReducer,
 })
 
+type RootReducerType = typeof reducers;
+export type GlobalStateType = ReturnType<RootReducerType>
+
+
+
 
 //const store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
+// @ts-ignore
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
-
+export type AppDispatch = typeof store.dispatch;
 
 export default store;

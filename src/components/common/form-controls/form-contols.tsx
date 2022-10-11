@@ -1,7 +1,8 @@
 import sInp from "../../login/login.module.css"
 import s from "../../dialogs/dialogs.module.css"
+import {WrappedFieldProps} from "redux-form/lib/Field";
 
-export const Textarea = ({input, meta, ...props}) => {
+export const Textarea = ({input, meta, ...props}:WrappedFieldProps) => {
   return (
     <div>
       <div>
@@ -12,7 +13,7 @@ export const Textarea = ({input, meta, ...props}) => {
   )
 }
 
-export const Input = ({input, meta, ...props}) => {
+export const Input = ({input, meta, ...props}: WrappedFieldProps) => {
   return (
     <div>
       <div>
