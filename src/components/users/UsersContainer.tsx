@@ -60,6 +60,8 @@ class usersContainer extends React.Component<PropsType> {
     }
 }
 
+
+
 const mapStateToProps = (state: GlobalStateType) => ({
     users: getUsers(state),
     pageCount: getPageCount(state),
@@ -68,6 +70,8 @@ const mapStateToProps = (state: GlobalStateType) => ({
     isFetching: getIsFetching(state),
     followingInProgress: getFollowingInProgress(state)
 });
+
+
 
 const objForConnect = {
     follow, requestUsers, unfollow, setCurrentPage
