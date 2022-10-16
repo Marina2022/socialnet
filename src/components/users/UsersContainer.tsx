@@ -1,6 +1,6 @@
 import {
     follow,
-    setCurrentPage,
+     UserReducerACs,
     requestUsers, unfollow
 } from "../../redux/users-reducer";
 import {connect} from "react-redux";
@@ -17,6 +17,9 @@ import {
 } from "../../redux/users-selectors";
 import {UserType} from "../../types/types";
 import {GlobalStateType} from "../../redux/redux-state";
+
+
+const {setCurrentPage} = UserReducerACs;
 
 type OwnPropsType = {
 }
@@ -59,8 +62,6 @@ class usersContainer extends React.Component<PropsType> {
         </>
     }
 }
-
-
 
 const mapStateToProps = (state: GlobalStateType) => ({
     users: getUsers(state),

@@ -1,13 +1,8 @@
-import {profileApi} from "../api/api";
 import {stopSubmit} from "redux-form";
 import {PhotosType, PostType, ProfileType} from "../types/types";
-
-const ADD_POST = 'ADD-POST';
-const SET_PROFILE = 'SET-PROFILE';
-const SET_STATUS = 'SET-STATUS';
-const DELETE_POST = 'DELETE-POST';
-const SET_PHOTOS = 'SET-PHOTOS';
-const IS_EDIT_MODE = 'IS-EDIT-MODE'
+import {profileApi} from "../api/profileApi";
+import {ProfileFormPropsType} from "../components/profile/profileInfo/ProfileForm";
+import {BaseThunkType, InferActions} from "./redux-state";
 
 const initialState = {
     posts: [
@@ -22,9 +17,9 @@ const initialState = {
 
 type InitialStateType = typeof initialState;
 
-const profileReducer = (state = initialState, action: any): InitialStateType => {
+const profileReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
-        case (ADD_POST) :
+        case 'ADD-POST' :
             const post = {
                 id: state.posts.length + 1,
                 message: action.postText,
@@ -32,73 +27,68 @@ const profileReducer = (state = initialState, action: any): InitialStateType => 
                 date: "now"
             };
             return {...state, posts: [...state.posts, post]};
-        case SET_PROFILE:
+        case 'SET-PROFILE':
             return {...state, profile: action.profile};
-        case SET_STATUS:
+        case 'SET-STATUS':
             return {...state, status: action.status};
-        case DELETE_POST:
+        case 'DELETE-POST':
             return {...state, posts: state.posts.filter(post => post.id !== action.id)}
-        case SET_PHOTOS:
+        case 'SET-PHOTOS':
             return {...state, profile: {...state.profile, photos: action.photos as PhotosType}}
-        case IS_EDIT_MODE:
+        case "IS-EDIT-MODE":
             return {...state, isEditMode: action.isEditMode}
         default:
             return state;
     }
 }
 
-type AddPostActionCreatorActionType = {type: typeof ADD_POST, postText: string}
-export const addPostActionCreator = (postText: string):AddPostActionCreatorActionType => ({type: ADD_POST, postText})
-
-type DeletePostActionType = {type: typeof DELETE_POST, id: number}
-export const deletePostAC = (id: number):DeletePostActionType => ({type: DELETE_POST, id})
-
-type SetProfileActionType = {type: typeof SET_PROFILE, profile: ProfileType}
-export const setProfile = (profile: ProfileType):SetProfileActionType => ({type: SET_PROFILE, profile})
-
-type SetStatusActionType = {type: typeof SET_STATUS, status: string}
-const setStatus = (status: string):SetStatusActionType => ({type: SET_STATUS, status})
-
-type SetPhotosActionType = {type: typeof SET_PHOTOS, photos: PhotosType}
-const setPhotos = (photos: PhotosType):SetPhotosActionType => ({type: SET_PHOTOS, photos})
-
-type SetEditProfileModeActionType = {type: typeof IS_EDIT_MODE, isEditMode: boolean}
-const setEditProfileMode = (isEditMode: boolean):SetEditProfileModeActionType => ({type: IS_EDIT_MODE, isEditMode})
-
-export const startProfileEditMode = () => (dispatch: any) => {
-    dispatch(setEditProfileMode(true))
-
+export const ProfileReducerACs = {
+    addPostActionCreator: (postText: string) => ({type: 'ADD-POST', postText} as const),
+    deletePostAC: (id: number) => ({type: 'DELETE-POST', id} as const),
+    setProfile: (profile: ProfileType) => ({type: 'SET-PROFILE', profile} as const),
+    setStatus: (status: string) => ({type: 'SET-STATUS', status} as const),
+    setPhotos: (photos: PhotosType) => ({type: 'SET-PHOTOS', photos} as const),
+    setEditProfileMode: (isEditMode: boolean) => ({type: 'IS-EDIT-MODE', isEditMode} as const),
 }
 
-export const getUser = (userId: number) => async (dispatch: any) => {
+export const startProfileEditMode = ():BaseThunkType<ActionsTypes, void> => (dispatch) => {
+    dispatch(ProfileReducerACs.setEditProfileMode(true))
+}
+
+export const getUser = (userId: number|null):thunkType => async (dispatch) => {
     const data = await profileApi.getUser(userId)
-    dispatch(setProfile(data))
+    dispatch(ProfileReducerACs.setProfile(data))
 }
 
-export const getStatus = (userId: number) => async (dispatch: any) => {
+export const getStatus = (userId: number):thunkType => async (dispatch) => {
     const data = await profileApi.getStatus(userId)
-    dispatch(setStatus(data))
+    dispatch(ProfileReducerACs.setStatus(data))
 }
 
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string):thunkType => async (dispatch) => {
     const data = await profileApi.updateStatus(status)
-    if (data.resultCode === 0) dispatch(setStatus(status))
+    if (data.resultCode === 0) dispatch(ProfileReducerACs.setStatus(status))
 }
 
-export const updateAvatar = (file: any) => async (dispatch: any) => {
+export const updateAvatar = (file: File):thunkType => async (dispatch) => {
     const data = await
         profileApi.updateAvatar(file);
-    if (data.data.resultCode === 0) dispatch(setPhotos(data.data.data.photos))
+    if (data.resultCode === 0) dispatch(ProfileReducerACs.setPhotos(data.data.photos))
 }
 
-export const uploadProfileData = (formData: any) => (dispatch: any, getState: any) => {
+export const uploadProfileData = (formData: ProfileFormPropsType):BaseThunkType<ActionsTypes, void> => (dispatch, getState) => {
     profileApi.uploadProfile(formData)
         .then(() => dispatch(getUser(getState().auth.userId)))
-        .then(() => dispatch(setEditProfileMode(false)))
+        .then(() => dispatch(ProfileReducerACs.setEditProfileMode(false)))
         .catch((err: string) => {
-            const action = stopSubmit("profile", {_error: err});
-            dispatch(action);
+
+            // @ts-ignore
+            dispatch(stopSubmit("profile", {_error: err}));
         })
 
 }
 export default profileReducer;
+
+
+type ActionsTypes = InferActions<typeof ProfileReducerACs>
+type thunkType = BaseThunkType<ActionsTypes>

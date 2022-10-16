@@ -13,10 +13,16 @@ import {useParams} from "react-router-dom";
 import {compose} from "redux";
 import {createBrowserHistory} from 'history';
 import {GlobalStateType} from "../../redux/redux-state";
-import {ProfileType} from "../../types/types";
 
 
-class ProfileContainer extends React.Component<MapStateType & MapDispatchType & ProfilePropsType> {
+type OwnPropsType = {
+    match: any,
+    history: any
+}
+
+export type WholeContainerProps = MapStateType & MapDispatchType & OwnPropsType;
+
+class ProfileContainer extends React.Component<WholeContainerProps> {
     componentDidMount() {
         let userId = this.props.match.userId;
         if (!userId) userId = this.props.userId;
@@ -28,7 +34,7 @@ class ProfileContainer extends React.Component<MapStateType & MapDispatchType & 
         this.props.getStatus(userId);
     }
 
-    componentDidUpdate(prevProps:ProfilePropsType, prevState: GlobalStateType) {
+    componentDidUpdate(prevProps: ProfilePropsType, prevState: GlobalStateType) {
         if (this.props.match.userId !== prevProps.match.userId) {
             let userId = this.props.match.userId;
             if (!userId) userId = this.props.userId;
@@ -40,29 +46,13 @@ class ProfileContainer extends React.Component<MapStateType & MapDispatchType & 
             this.props.getStatus(userId);
         }
     }
+
     render() {
         return (
             <Profile {...this.props} me={!this.props.match.userId}/>
         )
     }
 }
-
-type MapStateType = {
-    profile: ProfileType | null
-    status: string | null
-    userId: number | null
-    isEditMode: boolean
-}
-
-type MapDispatchType = {
-    getUser: (userId: number)=> void
-    updateStatus: (status: string) => void
-    getStatus: (userId: number) => void
-    updateAvatar: (file: any) => void
-    startProfileEditMode: () => void
-    uploadProfileData: (formData: any) => void
-}
-
 
 const
     mapStateToProps = (state: GlobalStateType) => ({
@@ -72,23 +62,28 @@ const
         isEditMode: state.profilePage.isEditMode,
 
     });
+type MapStateType = ReturnType<typeof mapStateToProps>
 
-const
-    withRouter = (Component: any) => {
-        return (props: ProfilePropsType) => {
+type MapDispatchType = {
+    getUser: (userId: number) => void
+    updateStatus: (status: string) => void
+    getStatus: (userId: number) => void
+    updateAvatar: (file: any) => void
+    startProfileEditMode: () => void
+    uploadProfileData: (formData: any) => void
+}
+
+function withRouter<propsType> (Component: React.ComponentType<propsType>) {
+        return (props: propsType) => {
             const match = useParams();
             const history = createBrowserHistory();
             return <Component {...props} match={match} history={history}/>
         }
     }
 
-//const WithRouterComponent = withRouter(withAuth(ProfileContainer))
-//export default connect (mapStateToProps, {setProfile, getUser})(WithRouterComponent);
-
-
-export default compose
+export default compose<React.ComponentType>
 (
-    connect<MapStateType, MapDispatchType, ProfilePropsType, GlobalStateType>(
+    connect<MapStateType, MapDispatchType, OwnPropsType, GlobalStateType>(
         mapStateToProps, {
             getUser, updateStatus, getStatus, updateAvatar, startProfileEditMode,
             uploadProfileData
@@ -97,3 +92,4 @@ export default compose
     withRouter,
 )
 (ProfileContainer)
+

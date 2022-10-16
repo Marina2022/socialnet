@@ -16,7 +16,7 @@ export type ContactsType = {
 }
 
 export type ProfileType = {
-    userId?: number
+    userId?: number|null
     lookingForAJob?: boolean
     lookingForAJobDescription?: string
     fullName?: string

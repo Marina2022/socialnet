@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './profileInfo.module.css'
 
 type ProfileStatusProps = {
-    status: string
+    status: string | null
     me: boolean
     updateStatus: (status: string) => void
 }
@@ -24,7 +24,7 @@ const ProfileStatus: React.FC<ProfileStatusProps> = (props) => {
     }
 
     const onInputBlur = () => {
-        props.updateStatus(status);
+        if (status) props.updateStatus(status);
         setEditMode(false)
     }
 
@@ -40,7 +40,7 @@ const ProfileStatus: React.FC<ProfileStatusProps> = (props) => {
                 onChange={onInputChange}
                 onBlur={onInputBlur}
                 type="text"
-                value={status}
+                value={status || ''}
               ></input>
             }
             {!editMode &&

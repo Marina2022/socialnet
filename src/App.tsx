@@ -12,15 +12,11 @@ import {connect} from "react-redux";
 import {initialize} from "./redux/auth-reducer";
 import Preloader from "./components/common/preloader";
 import React from 'react'
-
+import {GlobalStateType} from "./redux/redux-state";
 const DialogsContainer = React.lazy(() => import ("./components/dialogs/DialogsContainer"))
 const News = React.lazy(() => import ("./components/news/News"))
 
-
-//import DialogsContainer from "./components/dialogs/DialogsContainer";
-
-// eslint-disable-next-line no-undef
-class App extends React.Component {
+class App extends React.Component<MapStateProps & DispatchProps> {
 
   componentDidMount() {
     this.props.initialize();
@@ -28,7 +24,6 @@ class App extends React.Component {
 
   render() {
     if (!this.props.initialized) return <Preloader/>
-
     return (
       <div className="app-wrapper">
         <HeaderContainer/>
@@ -38,9 +33,9 @@ class App extends React.Component {
             <Routes>
               <Route path="/dialogs/*"
                      element={<DialogsContainer/>}/>
+              <Route path="/users" element={<UsersContainer/>}/>
               <Route path="/profile/:userId" element={<ProfileContainer/>}/>
               <Route path="/profile" element={<ProfileContainer/>}/>
-              <Route path="/users" element={<UsersContainer/>}/>
               <Route path="/news" element={<News/>}/>
               <Route path="/music" element={<Music/>}/>
               <Route path="/settings" element={<Settings/>}/>
@@ -53,9 +48,17 @@ class App extends React.Component {
   }
 }
 
-
-const mapStateToProps = state => ({
+const mapStateToProps = (state: GlobalStateType) => ({
   initialized: state.auth.initialized
 })
-export default connect(mapStateToProps, {initialize})(App);
+
+type MapStateProps = {
+  initialized: boolean
+}
+
+type DispatchProps = {
+  initialize: ()=>void
+}
+export default connect<MapStateProps, DispatchProps, {}, GlobalStateType>(mapStateToProps, {initialize})(App);
+
 

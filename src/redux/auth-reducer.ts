@@ -1,7 +1,8 @@
-import {authApi, ResultCodeEnum} from "../api/api";
+import {ResultCodeEnum} from "../api/api";
 import {stopSubmit} from "redux-form";
 import {ThunkAction} from "redux-thunk";
 import {GlobalStateType} from "./redux-state";
+import {authApi} from "../api/authApi";
 
 const SET_CURRENT_USER = 'SET-CURRENT-USER';
 const INIT = 'INIT';
@@ -17,6 +18,8 @@ const initialState = {
 
 export type InitialStateType = typeof initialState;
 
+
+//type ActionsType = SetCurrentUserActionType | setInitActionType | StopSubmitType
 type ActionsType = SetCurrentUserActionType | setInitActionType
 
 const authReducer = (state = initialState, action: ActionsType): InitialStateType => {
@@ -65,7 +68,6 @@ export const getAuth = () => async (dispatch: any) => {
 }
 
 type ThunkType = ThunkAction<Promise<void>, GlobalStateType, unknown,  ActionsType>
-//type ThunkType2 = ThunkAction<FormAction, GlobalStateType, unknown,  ActionsType>
 
 export const initialize = ():ThunkType => async (dispatch) => {
     await dispatch(getAuth())
@@ -77,7 +79,6 @@ export const authorize = (formData: any):ThunkType => async (dispatch) => {
     if (data.resultCode === ResultCodeEnum.success) {
       await dispatch(getAuth());
     } else {
-        // фигня какая-то.. Похоже stopSubmit чего-то возвращает. и это чего-то должно попсатьв промис в описании фанка
         // @ts-ignore
         await dispatch(stopSubmit("login", {_error: data.messages[0]}))
     }

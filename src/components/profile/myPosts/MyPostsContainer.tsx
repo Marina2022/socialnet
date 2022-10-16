@@ -1,4 +1,4 @@
-import {addPostActionCreator} from "../../../redux/profile-reducer";
+import {ProfileReducerACs} from "../../../redux/profile-reducer";
 import MyPosts from "./MyPosts";
 
 import {connect} from "react-redux";
@@ -13,7 +13,7 @@ const mapStateToProps = (state: GlobalStateType) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     addPost: (text: string)=> {
-      dispatch(addPostActionCreator(text))
+      dispatch(ProfileReducerACs.addPostActionCreator(text))
     }
   }
 }

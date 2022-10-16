@@ -5,14 +5,12 @@ import mockPhoto from "../../../assets/1.jpg";
 import ProfileForm from "./ProfileForm";
 import {ProfilePropsType} from "../Profile";
 import React from "react";
-import {ProfileType} from "../../../types/types";
+
 
 const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
   if (!props.profile) return <Preloader/>
-
   const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // @ts-ignore
-    if (e.target.files[0]) props.updateAvatar(e.target.files[0]);
+    if (e.target.files) props.updateAvatar(e.target.files[0]);
   }
     return (
     <div>
@@ -25,8 +23,7 @@ const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
       <div className={styles.userInfo}>
         <div>
           <img
-              // @ts-ignore
-            src={props.profile.photos.large || mockPhoto}
+            src={props.profile.photos ? props.profile.photos.large : mockPhoto}
             alt=""
             className={styles.ava}
           />
@@ -44,17 +41,8 @@ const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
   )
 }
 
-type ProfileDataPropsType = {
-  profile: ProfileType
-  me: boolean
-  updateStatus: (status: string) => void
-  status: string
-  startProfileEditMode: ()=> void
-}
-
-
-const ProfileData:React.FC<ProfileDataPropsType> = ({profile, me, updateStatus, status, startProfileEditMode}:ProfileDataPropsType) => {
-
+const ProfileData:React.FC<ProfilePropsType> = ({profile, me, updateStatus, status, startProfileEditMode}:ProfilePropsType) => {
+  if (!profile) return <></>;
   const {aboutMe, fullName, lookingForAJob, lookingForAJobDescription} = profile
   return <>
     <div >

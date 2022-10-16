@@ -1,4 +1,4 @@
-import profileReducer, {addPostActionCreator, deletePostAC} from "./profile-reducer";
+import profileReducer, {ProfileReducerACs} from "./profile-reducer";
 
 const state = {
   posts: [
@@ -9,19 +9,19 @@ const state = {
 }
 
 it ('adds a post', ()=>{
-  const action = addPostActionCreator('trulala');
+  const action = ProfileReducerACs.addPostActionCreator('trulala');
   const newState = profileReducer(state, action);
   expect(newState.posts.length).toBe(4);
 })
 
 it ('adds a post-text', ()=>{
-  const action = addPostActionCreator('trulala');
+  const action = ProfileReducerACs.addPostActionCreator('trulala');
   const newState = profileReducer(state, action);
   expect(newState.posts[3].message).toBe("trulala");
 })
 
 it ('delete a post', ()=>{
-  const action = deletePostAC(1);
+  const action = ProfileReducerACs.deletePostAC(1);
   const newState = profileReducer(state, action);
   expect(newState.posts.length).toBe(2);
 })
