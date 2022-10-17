@@ -1,6 +1,6 @@
 import {Form, Field, Formik, FormikHelpers} from "formik";
 import React from "react";
-
+import classNames from 'classnames'
 import styles from "./users.module.css"
 import {FilterType} from "../../types/types";
 
@@ -51,7 +51,7 @@ export const UserSearchForm: React.FC<PropsType> = (props) => {
 
                         />
                         {errors.term && touched.term && errors.term}
-                        <Field className={styles.formikInput}
+                        <Field className={classNames(styles.formikInput, styles.formikSelect)}
                                name="friend" as="select"
                                onChange={handleChange}
                                onBlur={handleBlur}

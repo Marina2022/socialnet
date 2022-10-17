@@ -16,6 +16,8 @@ const reducers = combineReducers({
   form: formReducer,
 })
 
+export type AppDispatch = typeof store.dispatch
+
 type RootReducerType = typeof reducers;
 export type GlobalStateType = ReturnType<RootReducerType>
 
@@ -30,6 +32,5 @@ export type BaseThunkType<A extends Action, R = Promise<void>> = ThunkAction<R, 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
-export type AppDispatch = typeof store.dispatch;
 
 export default store;

@@ -1,6 +1,7 @@
 import {FilterType, UserType} from "../types/types";
 import {BaseThunkType, InferActions} from "./redux-state";
 import {usersApi} from "../api/usersApi";
+import {AnyAction} from "redux";
 
 
 const initialState = {
@@ -70,12 +71,12 @@ const usersReducer = (state = initialState, action: ActionsTypes):InitialStateTy
   }
 }
 
-type ThunkType = BaseThunkType<ActionsTypes>
+export type ThunkType = BaseThunkType<ActionsTypes>
 
-export const requestUsers = (pageCount: number, currentPage: number, filter: FilterType): ThunkType => {
+//export const requestUsers = (pageCount: number, currentPage: number, filter: FilterType): ThunkType => {
+export const requestUsers = (pageCount: number, currentPage: number, filter: FilterType):ThunkType => {
   return async (dispatch, getState ) => {
     dispatch(UserReducerACs.toggleIsFetching(true));
-    // сюда надо диспачить сетФильтер, ну так и диспачь
     dispatch(UserReducerACs.setFilter(filter));
     const data = await usersApi.getUsers(pageCount, currentPage, filter);
         dispatch(UserReducerACs.setUsers(data.items));

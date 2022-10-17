@@ -4,7 +4,7 @@ import Settings from "./components/settings/Settings";
 import Music from "./components/music/Music";
 
 import NavbarContainer from "./components/navbar/NavbarContainer";
-import UsersContainer from "./components/users/UsersContainer";
+import {UsersPage} from "./components/users/UsersContainer";
 import ProfileContainer from "./components/profile/ProfileContainer";
 import Login from "./components/login/Login";
 import HeaderContainer from "./components/header/HeaderContainer";
@@ -33,7 +33,7 @@ class App extends React.Component<MapStateProps & DispatchProps> {
             <Routes>
               <Route path="/dialogs/*"
                      element={<DialogsContainer/>}/>
-              <Route path="/users" element={<UsersContainer/>}/>
+              <Route path="/users" element={<UsersPage/>}/>
               <Route path="/profile/:userId" element={<ProfileContainer/>}/>
               <Route path="/profile" element={<ProfileContainer/>}/>
               <Route path="/news" element={<News/>}/>

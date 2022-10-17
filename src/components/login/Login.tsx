@@ -19,7 +19,6 @@ type PropsType = MapToPropsType & DispatchToPropsType
 
 
 const Login: React.FC<PropsType> = (props:PropsType) => {
-  console.log('зашел в логин')
   if(props.isAuth) return <Navigate to={'/profile'} />
   const onSubmit = (formData: any) => {
     props.authorize(formData)
