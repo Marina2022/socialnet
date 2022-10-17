@@ -12,6 +12,10 @@ export const getCurrentPage = (state: GlobalStateType) => {
   return state.usersPage.currentPage;
 }
 
+export const getUsersFilter = (state: GlobalStateType) => {
+  return state.usersPage.filter;
+}
+
 export const getTotalPageCount = (state: GlobalStateType) => {
   return state.usersPage.totalPageCount;
 }

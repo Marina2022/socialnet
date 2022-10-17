@@ -9,7 +9,7 @@ type PropsType = {
 
 const Pagination: React.FC<PropsType> = (props) => {
   const {currentPage, totalPageCount, onPageClick} = props;
-  let firstPage, lastPage, showRightPoints = true, showLeftPoints = true;
+  let firstPage, lastPage, showRightPoints = true, showLeftPoints = true, showLastPage = true, showFirstPage = true;
   if (currentPage < 5) {
     firstPage = 2;
     lastPage = 6;
@@ -23,6 +23,16 @@ const Pagination: React.FC<PropsType> = (props) => {
     lastPage = currentPage + 2;
   }
 
+  if (totalPageCount < 20) { // 20 страниц показывае
+    showRightPoints = false;
+    showLeftPoints = false;
+    firstPage = 2;
+    lastPage = totalPageCount-1;
+    if (totalPageCount<=1) showLastPage = false;
+    if (totalPageCount===0) showFirstPage = false;
+  }
+
+
   const pageArray = [];
   for (let i = firstPage; i <= lastPage; i++) {
     pageArray.push(i);
@@ -31,11 +41,12 @@ const Pagination: React.FC<PropsType> = (props) => {
   return (
     <div>
       <div className={styles.pagination}>
-        <span
-          onClick={() => onPageClick(1)}
-          className={currentPage === 1 ?
-            styles.active + ' ' + styles.pagItem
-            : styles.pagItem}>1</span>
+        {showFirstPage && <span
+            onClick={() => onPageClick(1)}
+            className={currentPage === 1 ?
+                styles.active + ' ' + styles.pagItem
+                : styles.pagItem}>1</span>}
+
         {showLeftPoints ? "..." : ''}
 
         {pageArray.map(p =>
@@ -49,12 +60,12 @@ const Pagination: React.FC<PropsType> = (props) => {
         }
         {showRightPoints ? "..." : ''}
 
-        <span
-          onClick={() => onPageClick(totalPageCount)}
-          className={currentPage === totalPageCount
-            ? styles.active + ' ' + styles.pagItem
-            : styles.pagItem}>{totalPageCount}
-        </span>
+        {showLastPage && <span
+            onClick={() => onPageClick(totalPageCount)}
+            className={currentPage === totalPageCount
+                ? styles.active + ' ' + styles.pagItem
+                : styles.pagItem}>{totalPageCount}
+        </span>}
       </div>
     </div>
   )

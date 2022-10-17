@@ -60,3 +60,12 @@ margin-bottom: 20px;
     align-items: center;
     justify-content:center ;
 }
+
+.formik {
+    margin-bottom: 20px;
+}
+
+.formikInput {
+    margin-right: 20px;
+    height: 23px;
+}

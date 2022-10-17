@@ -57,3 +57,8 @@ export type DialogType = {
     name: string
     avatar: string
 }
+
+export type FilterType = {
+    term: string,
+    friend: null | boolean
+}

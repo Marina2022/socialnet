@@ -10,9 +10,6 @@ const result = {
     data: {}
 }
 
-
-
-
 let state: InitialStateType;
 
 beforeEach(() => {
@@ -64,6 +61,10 @@ beforeEach(() => {
         totalPageCount: 0,
         isFetching: false,
         followingInProgress: [],
+        filter: {
+            term: '',
+            friend: null
+        }
     }
 })
 

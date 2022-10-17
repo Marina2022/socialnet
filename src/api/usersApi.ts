@@ -1,5 +1,5 @@
 import {APIResponseType, instance} from "./api";
-import {UserType} from "../types/types";
+import {FilterType, UserType} from "../types/types";
 
 type getUsers = {
     items: Array<UserType>
@@ -8,9 +8,9 @@ type getUsers = {
 }
 
 export const usersApi = {
-    getUsers(pageCount: number, currentPage: number) {
+    getUsers(pageCount: number, currentPage: number, filter: FilterType) {
         return instance.get<getUsers>
-        (`users?count=${pageCount}&page=${currentPage}`) // pageCount = how many users per page
+        (`users?count=${pageCount}&page=${currentPage}&term=${filter.term}&friend=${filter.friend}`) // pageCount = how many users per page
             .then(response => response.data)
     },
 

@@ -32,3 +32,6 @@ button {
 button:disabled {
     background-color: #bce8f7;
 }
+button:active {
+    background: #1e98ff;
+}

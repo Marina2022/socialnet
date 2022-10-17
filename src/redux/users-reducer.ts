@@ -1,4 +1,4 @@
-import {UserType} from "../types/types";
+import {FilterType, UserType} from "../types/types";
 import {BaseThunkType, InferActions} from "./redux-state";
 import {usersApi} from "../api/usersApi";
 
@@ -10,6 +10,10 @@ const initialState = {
   totalPageCount: 0,
   isFetching: false,
   followingInProgress: [] as Array<number>,
+  filter: {
+    term: '',
+    friend: null as null | boolean
+  }
 }
 
 export type InitialStateType = typeof initialState;
@@ -21,6 +25,7 @@ export const UserReducerACs = {
   setTotalPageCount: (totalCount: number) => ({type: 'SET-TOTAL-PAGE-COUNT', totalCount} as const),
   setCurrentPage: (page: number) => ({type: 'SET-CURRENT-PAGE', page} as const),
   toggleIsFetching: (isFetching: boolean) => ({type: 'TOGGLE-IS-FETCHING', isFetching} as const),
+  setFilter: (filter: FilterType) => ({type: 'SET-FILTER', filter} as const),
   toggleFollowingInProgress: (isFetching: boolean, id: number) => ({
     type: 'TOGGLE-FOLLOWING-PROGRESS',
     isFetching,
@@ -56,6 +61,10 @@ const usersReducer = (state = initialState, action: ActionsTypes):InitialStateTy
         ...state, followingInProgress: action.isFetching ? [...state.followingInProgress, action.id]
           : state.followingInProgress.filter(id => id !== action.id)
       }
+    case "SET-FILTER":
+      return {
+        ...state, filter: action.filter
+      }
     default:
       return state;
   }
@@ -63,10 +72,12 @@ const usersReducer = (state = initialState, action: ActionsTypes):InitialStateTy
 
 type ThunkType = BaseThunkType<ActionsTypes>
 
-export const requestUsers = (pageCount: number, currentPage: number): ThunkType => {
+export const requestUsers = (pageCount: number, currentPage: number, filter: FilterType): ThunkType => {
   return async (dispatch, getState ) => {
     dispatch(UserReducerACs.toggleIsFetching(true));
-    const data = await usersApi.getUsers(pageCount, currentPage);
+    // сюда надо диспачить сетФильтер, ну так и диспачь
+    dispatch(UserReducerACs.setFilter(filter));
+    const data = await usersApi.getUsers(pageCount, currentPage, filter);
         dispatch(UserReducerACs.setUsers(data.items));
         dispatch(UserReducerACs.setTotalPageCount(Math.ceil(data.totalCount / pageCount)));
         dispatch(UserReducerACs.toggleIsFetching(false))
