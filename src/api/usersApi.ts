@@ -12,7 +12,6 @@ export const usersApi = {
         return instance.get<getUsers>
         (`users?count=${pageCount}&page=${currentPage}&term=${filter.term}&friend=${filter.friend}`) // pageCount = how many users per page
             .then(response => {
-                console.log(response);
                 return response.data
             })
     },

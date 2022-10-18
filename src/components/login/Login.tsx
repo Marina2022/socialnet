@@ -1,27 +1,18 @@
 import {reduxForm} from "redux-form";
 import {authorize} from "../../redux/auth-reducer";
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Navigate} from "react-router-dom";
-import {GlobalStateType} from "../../redux/redux-state";
+import {AppDispatch, GlobalStateType} from "../../redux/redux-state";
 import LoginForm from "./LoginForm";
 import React from "react";
 
-type DispatchToPropsType ={
-  authorize: (formData:any)=>void
-}
 
-type MapToPropsType ={
-  isAuth: boolean
-}
-
-type OwnProps = {}
-type PropsType = MapToPropsType & DispatchToPropsType
-
-
-const Login: React.FC<PropsType> = (props:PropsType) => {
-  if(props.isAuth) return <Navigate to={'/profile'} />
+const Login: React.FC = (props) => {
+  const isAuth = useSelector((state: GlobalStateType)=>state.auth.isAuth);
+  const dispatch: AppDispatch = useDispatch();
+  if(isAuth) return <Navigate to={'/profile'} />
   const onSubmit = (formData: any) => {
-    props.authorize(formData)
+    dispatch(authorize(formData))
   };
   return <div>
     <h1>
@@ -34,8 +25,4 @@ const Login: React.FC<PropsType> = (props:PropsType) => {
 
 const LoginReduxForm = reduxForm({form: "login"})(LoginForm)
 
-const mapStateToProps = (state: GlobalStateType)=> ({
-  isAuth: state.auth.isAuth
-})
-
-export default connect<MapToPropsType, DispatchToPropsType, OwnProps, GlobalStateType>(mapStateToProps, {authorize})(Login);
+export default Login;

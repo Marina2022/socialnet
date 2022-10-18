@@ -18,6 +18,7 @@ import {AppDispatch} from "../../redux/redux-state";
 const {setCurrentPage, setFilter} = UserReducerACs;
 
 const Users: React.FC = (props) => {
+  const filter = useSelector(getUsersFilter);
 
   useEffect(() => {
     if (users.length === 0) {
@@ -29,7 +30,7 @@ const Users: React.FC = (props) => {
   const dispatch:AppDispatch = useDispatch();
 
   const pageCount = useSelector(getPageCount);
-  const filter = useSelector(getUsersFilter);
+
   const followingInProgress = useSelector(getFollowingInProgress);
   const users = useSelector(getUsers);
   const totalPageCount = useSelector(getTotalPageCount);
