@@ -18,18 +18,11 @@ import {AppDispatch} from "../../redux/redux-state";
 const {setCurrentPage, setFilter} = UserReducerACs;
 
 const Users: React.FC = (props) => {
-  const filter = useSelector(getUsersFilter);
-
-  useEffect(() => {
-    if (users.length === 0) {
-      // @ts-ignore
-      dispatch(requestUsers(pageCount, currentPage, filter));
-    }
-  }, [])
-
   const dispatch:AppDispatch = useDispatch();
-
+  const filter = useSelector(getUsersFilter);
+  const currentPage = useSelector(getCurrentPage);
   const pageCount = useSelector(getPageCount);
+
 
   const followingInProgress = useSelector(getFollowingInProgress);
   const users = useSelector(getUsers);
@@ -41,12 +34,10 @@ const Users: React.FC = (props) => {
   }
 
   const onFilterChange = (filter: FilterType) => {
-    setCurrentPage(1);
-    setFilter(filter); // добавь в диспач
+    dispatch(setCurrentPage(1));
+    setFilter(filter);
     dispatch(requestUsers(pageCount, 1, filter));
   }
-
-  const currentPage = useSelector(getCurrentPage);
 
   return (
     <div>
@@ -62,7 +53,7 @@ const Users: React.FC = (props) => {
       />)
       }
       <Pagination currentPage={currentPage} totalPageCount={totalPageCount} onPageClick={onPageClick} />
-      sss
+
     </div>
   )
 }

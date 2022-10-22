@@ -1,18 +1,32 @@
 import styles from "./profileInfo.module.css";
 import Preloader from "../../common/preloader";
-import ProfileStatus from "./ProfileStatus";
 import mockPhoto from "../../../assets/1.jpg";
-import ProfileForm from "./ProfileForm";
-import {ProfilePropsType} from "../Profile";
+import ProfileForm, {ProfileFormPropsType} from "./ProfileForm";
 import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, GlobalStateType} from "../../../redux/redux-state";
+import {updateAvatar, uploadProfileData} from "../../../redux/profile-reducer";
+import {ProfileData} from "./ProfileData";
 
+type PropsType = {
+  me: boolean
+}
+const ProfileInfo:React.FC<PropsType> = (props) => {
 
-const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
-  if (!props.profile) return <Preloader/>
+  const dispatch: AppDispatch = useDispatch();
+  const profile = useSelector((state: GlobalStateType)=>state.profilePage.profile)
+  const isEditMode = useSelector((state: GlobalStateType)=>state.profilePage.isEditMode)
+
+  if (!profile) return <Preloader/>
   const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) props.updateAvatar(e.target.files[0]);
+    if (e.target.files) dispatch(updateAvatar(e.target.files[0]));
   }
-    return (
+
+  const myOnSubmit = (formData: ProfileFormPropsType)=>{
+    dispatch(uploadProfileData(formData))
+  }
+
+  return (
     <div>
       <div className={styles.upperImg}>
         <img
@@ -23,7 +37,7 @@ const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
       <div className={styles.userInfo}>
         <div>
           <img
-            src={props.profile.photos ? props.profile.photos.large : mockPhoto}
+            src={profile.photos ? profile.photos.large : mockPhoto}
             alt=""
             className={styles.ava}
           />
@@ -32,32 +46,17 @@ const ProfileInfo:React.FC<ProfilePropsType> = (props: ProfilePropsType) => {
           </div>}
         </div>
 
-        {!props.isEditMode ? <ProfileData {...props} /> :
+        {!isEditMode ? <ProfileData me={props.me} /> :
             <ProfileForm
-                initialValues={props.profile}
-                onSubmit={props.uploadProfileData}{...props} />}
+                initialValues={profile}
+                onSubmit={myOnSubmit}
+                me={props.me} />}
       </div>
     </div>
   )
 }
 
-const ProfileData:React.FC<ProfilePropsType> = ({profile, me, updateStatus, status, startProfileEditMode}:ProfilePropsType) => {
-  if (!profile) return <></>;
-  const {aboutMe, fullName, lookingForAJob, lookingForAJobDescription} = profile
-  return <>
-    <div >
-      <h2 className={styles.fullName}>{fullName}</h2>
-      <div><b>About me: </b>{aboutMe}</div>
-      <div><b>Looking for a job: </b>{lookingForAJob ? "yes" : "no"}</div>
-      <div><b>My skills: </b>{lookingForAJobDescription}</div>
-      <br/>
-      <div><b>Status: </b></div>
-      <ProfileStatus me={me} updateStatus={updateStatus} status={status}/>
-      <br/>
-      <button className={styles.mt20} onClick={startProfileEditMode}>Edit</button>
-    </div>
-  </>
-}
+
 
 
 export default ProfileInfo;

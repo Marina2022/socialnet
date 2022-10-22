@@ -1,6 +1,6 @@
 import {Route, Routes} from 'react-router-dom'
 import "./App.css";
-import Settings from "./components/settings/Settings";
+
 import Music from "./components/music/Music";
 
 import NavbarContainer from "./components/navbar/NavbarContainer";
@@ -11,10 +11,11 @@ import HeaderContainer from "./components/header/HeaderContainer";
 import {connect} from "react-redux";
 import {initialize} from "./redux/auth-reducer";
 import Preloader from "./components/common/preloader";
-import React from 'react'
+import React, {lazy} from 'react'
 import {GlobalStateType} from "./redux/redux-state";
 const DialogsContainer = React.lazy(() => import ("./components/dialogs/DialogsContainer"))
 const News = React.lazy(() => import ("./components/news/News"))
+const ChatPage = lazy(()=>import("./components/pages/ChatPage/ChatPage"))
 
 class App extends React.Component<MapStateProps & DispatchProps> {
 
@@ -38,7 +39,7 @@ class App extends React.Component<MapStateProps & DispatchProps> {
               <Route path="/profile" element={<ProfileContainer/>}/>
               <Route path="/news" element={<News/>}/>
               <Route path="/music" element={<Music/>}/>
-              <Route path="/settings" element={<Settings/>}/>
+              <Route path="/chat" element={<ChatPage/>}/>
               <Route path="/login" element={<Login/>}/>
             </Routes>
           </React.Suspense>

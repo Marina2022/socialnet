@@ -6,13 +6,14 @@ import {BaseThunkType, InferActions} from "./redux-state";
 
 const initialState = {
     posts: [
-        {id: 1, message: "Life is beautiful!", likesCount: 15},
+        {id: 1, message: "Life is very short and there's no time..", likesCount: 15},
         {id: 2, message: "go to school", likesCount: 20},
         {id: 3, message: "What's going on?", likesCount: 5}
     ] as Array<PostType>,
     profile: null as ProfileType | null,
     isEditMode: false,
-    status: null as string | null
+    status: null as string | null,
+    isFetching: false
 }
 
 type InitialStateType = typeof initialState;
@@ -37,6 +38,8 @@ const profileReducer = (state = initialState, action: ActionsTypes): InitialStat
             return {...state, profile: {...state.profile, photos: action.photos as PhotosType}}
         case "IS-EDIT-MODE":
             return {...state, isEditMode: action.isEditMode}
+        case "IS-FETCHING":
+            return {...state, isFetching: action.isFetching}
         default:
             return state;
     }
@@ -49,15 +52,18 @@ export const ProfileReducerACs = {
     setStatus: (status: string) => ({type: 'SET-STATUS', status} as const),
     setPhotos: (photos: PhotosType) => ({type: 'SET-PHOTOS', photos} as const),
     setEditProfileMode: (isEditMode: boolean) => ({type: 'IS-EDIT-MODE', isEditMode} as const),
+    isFetching: (isFetching: boolean)=>({type: 'IS-FETCHING', isFetching} as const)
 }
 
 export const startProfileEditMode = ():BaseThunkType<ActionsTypes, void> => (dispatch) => {
+    console.log('дошла ли досюда-то?')
     dispatch(ProfileReducerACs.setEditProfileMode(true))
 }
 
 export const getUser = (userId: number|null):thunkType => async (dispatch) => {
     const data = await profileApi.getUser(userId)
     dispatch(ProfileReducerACs.setProfile(data))
+    dispatch(ProfileReducerACs.isFetching(false))
 }
 
 export const getStatus = (userId: number):thunkType => async (dispatch) => {

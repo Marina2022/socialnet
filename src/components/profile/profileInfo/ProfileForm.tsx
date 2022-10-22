@@ -2,7 +2,9 @@ import styles from "./profileInfo.module.css";
 import ProfileStatus from "./ProfileStatus";
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
 import React from "react";
-import {ProfilePropsType} from "../Profile";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, GlobalStateType} from "../../../redux/redux-state";
+import {startProfileEditMode} from "../../../redux/profile-reducer";
 
 
 export type ProfileFormPropsType = {
@@ -12,24 +14,29 @@ export type ProfileFormPropsType = {
     lookingForAJobDescription: string
 }
 
-const ProfileForm: React.FC<InjectedFormProps<ProfileFormPropsType, ProfilePropsType> & ProfilePropsType> =
+type OwnProps = {
+    me: boolean;
+}
+
+const ProfileForm: React.FC<InjectedFormProps<ProfileFormPropsType, OwnProps> & OwnProps> =
     ({
          error,
          handleSubmit,
-         profile,
          me,
-         updateStatus,
-         status,
-         startProfileEditMode
-
-
      }) => {
+
+        const dispatch: AppDispatch = useDispatch();
+        const myStartProfileEditMode = ()=>{
+            dispatch(startProfileEditMode)
+        }
+
+        const profile = useSelector((state: GlobalStateType)=>state.profilePage.profile)
+
         let fullName
         if (profile) {
             fullName = profile.fullName
         } else fullName = '';
         return <>
-
             <form onSubmit={handleSubmit}>
                 <div style={{color: "red"}}>{error}</div>
                 <h2 className={styles.fullName}>{fullName}</h2>
@@ -47,12 +54,12 @@ const ProfileForm: React.FC<InjectedFormProps<ProfileFormPropsType, ProfileProps
                 <div><b>Contacts:</b></div>
                 <br/>
                 <div><b>Status:</b></div>
-                <ProfileStatus me={me} updateStatus={updateStatus} status={status}/>
+                <ProfileStatus me={me}/>
                 <br/>
-                <button className={styles.mt20} onClick={startProfileEditMode}>Submit</button>
+                <button className={styles.mt20} onClick={myStartProfileEditMode}>Submit</button>
             </form>
         </>
     }
 
 
-export default reduxForm<ProfileFormPropsType, ProfilePropsType>({form: "profile"})(ProfileForm);
+export default reduxForm<ProfileFormPropsType, OwnProps>({form: "profile"})(ProfileForm);

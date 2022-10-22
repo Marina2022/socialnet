@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import styles from './profileInfo.module.css'
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, GlobalStateType} from "../../../redux/redux-state";
+import {updateStatus} from "../../../redux/profile-reducer";
 
 type ProfileStatusProps = {
-    status: string | null
     me: boolean
-    updateStatus: (status: string) => void
 }
 
 const ProfileStatus: React.FC<ProfileStatusProps> = (props) => {
+    const dispatch: AppDispatch = useDispatch();
+    const globalStatus = useSelector((state: GlobalStateType)=>state.profilePage.status)
 
     const [editMode, setEditMode] = useState(false);
-    const [status, setStatus] = useState(props.status)
+    const [status, setStatus] = useState(globalStatus)
 
 
     useEffect(() => {
-        setStatus(props.status)
-    }, [props.status])
+        setStatus(globalStatus)
+    }, [globalStatus])
 
 
     const onStatusClick = () => {
@@ -23,8 +26,9 @@ const ProfileStatus: React.FC<ProfileStatusProps> = (props) => {
         setEditMode(true)
     }
 
+
     const onInputBlur = () => {
-        if (status) props.updateStatus(status);
+        if (status) dispatch(updateStatus(status));
         setEditMode(false)
     }
 
@@ -44,7 +48,7 @@ const ProfileStatus: React.FC<ProfileStatusProps> = (props) => {
               ></input>
             }
             {!editMode &&
-              <span className={styles.statusInput} onClick={onStatusClick}>{props.status}</span>
+              <span className={styles.statusInput} onClick={onStatusClick}>{globalStatus}</span>
             }
         </div>
     )

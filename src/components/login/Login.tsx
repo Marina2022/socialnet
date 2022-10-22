@@ -22,7 +22,16 @@ const Login: React.FC = (props) => {
   </div>
 }
 
+type LoginFormPropsType = {
+  email: string
+  password: string
+  rememberMe: boolean
+}
 
-const LoginReduxForm = reduxForm({form: "login"})(LoginForm)
+type LoginPropsType = {
+  onSubmit: (formData: any)=>void
+}
+
+const LoginReduxForm = reduxForm<LoginFormPropsType, LoginPropsType>({form: "login"})(LoginForm)
 
 export default Login;

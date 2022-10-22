@@ -1,50 +1,38 @@
-import s from "./myPosts.module.css";
+import styles from "./myPosts.module.css";
 import Post from "./post/Post";
-import {Field, reduxForm} from "redux-form";
-import {Textarea} from "../../common/form-controls/form-contols";
-import {maxLengthCreator, required} from "../../common/form-controls/validators";
-import {PostType} from "../../../types/types";
+import {reduxForm} from "redux-form";
 import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, GlobalStateType} from "../../../redux/redux-state";
+import {ProfileReducerACs} from "../../../redux/profile-reducer";
+import {NewPostForm, PostFormPropsType} from "./NewPostForm";
 
-const maxLength10 = maxLengthCreator(10);
+const MyPosts: React.FC = () => {
+    const posts = useSelector((state: GlobalStateType)=>state.profilePage.posts)
+    const dispatch: AppDispatch = useDispatch();
 
-type MyPostPropsType = {
-    addPost: (post: string)=> void
-    posts: Array<PostType>
-}
 
-const MyPosts: React.FC<MyPostPropsType> = ({addPost, posts}) => {
   const postElements = posts.map(post=><Post message={post.message} likesCount={post.likesCount} key={post.id}/>)
 
   const onAddPost = (formData: any) => {
-    addPost(formData.postText);
+      dispatch(ProfileReducerACs.addPostActionCreator(formData.postText));
   }
 
   return (
-    <div className={s.myPosts}>
+    <div className={styles.myPosts}>
       <h2>My posts</h2>
-      <div className={s.newPost}>
+      <div className={styles.newPost}>
         <h3>New post</h3>
-        <NewPostForm onSubmit={onAddPost} />
+        <ReduxNewPostForm onSubmit={onAddPost} />
       </div>
-      <ul className={s.postsList}>
+      <ul className={styles.postsList}>
         {postElements}
       </ul>
     </div>
   );
 }
 
-// @ts-ignore
-const Form = ({handleSubmit}) => {
-  return <form onSubmit={handleSubmit}>
-    <Field component={Textarea} name="postText" validate={[required, maxLength10]} />
-    <div>
-      <button>Add Post</button>
-    </div>
-  </form>
-}
-
-const NewPostForm = reduxForm({form: 'newPostForm'})(Form);
+const ReduxNewPostForm = reduxForm<PostFormPropsType>({form: 'newPostForm'})(NewPostForm);
 
 
 export default MyPosts;

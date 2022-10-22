@@ -47,8 +47,8 @@ const Navbar:React.FC<PropsType> = ({friends}:PropsType) => {
           </NavLink>
         </li>
         <li className="menu-item">
-          <NavLink to="/settings" className={isActive}>
-            Settings
+          <NavLink to="/chat" className={isActive}>
+            Chat
           </NavLink>
         </li>
       </ul>

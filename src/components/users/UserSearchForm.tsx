@@ -16,21 +16,18 @@ type FormValues = {
 
 export const UserSearchForm: React.FC<PropsType> = (props) => {
     const onSubmitHandler = (values: FormValues, {setSubmitting}: FormikHelpers<FormValues>) => {
-        const friend = values.friend === "all" ? null: values.friend === "friends" ? true : false;
+        const friend = values.friend === "all" ? null: values.friend === "followed" ? true : false;
         props.onFilterChange({term: values.term, friend: friend});
         setSubmitting(false);
     }
+
+    const myFriend = props.filter.friend === true ? "followed" : props.filter.friend === false ? "not-followed": "all"
+
     return (
         <div className={styles.formik}>
             <Formik
-                initialValues={{term: props.filter.term, friend: "all"}}
-                // validate={values => {
-                //   const errors = {};
-                //   if (!values.term) {
-                //     errors.term = 'Required';
-                //   return errors;
-                // } }
-                onSubmit={onSubmitHandler}
+                initialValues={{term: props.filter.term, friend: myFriend}}
+        onSubmit={onSubmitHandler}
             >
                 {({
                       values,
@@ -57,8 +54,8 @@ export const UserSearchForm: React.FC<PropsType> = (props) => {
                                onBlur={handleBlur}
                         >
                             <option value="all">All</option>
-                            <option value="friends">Followed</option>
-                            <option value="not-friends">Not followed</option>
+                            <option value="followed">Followed</option>
+                            <option value="not-followed">Not followed</option>
                         </Field>
 
                         <button type="submit" disabled={isSubmitting}>

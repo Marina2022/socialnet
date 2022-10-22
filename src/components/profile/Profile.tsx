@@ -1,20 +1,19 @@
 import ProfileInfo from "./profileInfo/ProfileInfo";
-import MyPostsContainer from "./myPosts/MyPostsContainer";
 import React from "react";
-import {WholeContainerProps} from "./ProfileContainer";
+import MyPosts from "./myPosts/MyPosts";
+import {useSelector} from "react-redux";
+import {GlobalStateType} from "../../redux/redux-state";
 
 type OwnProps = {
   me: boolean
 }
 
-export type ProfilePropsType = WholeContainerProps & OwnProps
-
-const Profile: React.FC<ProfilePropsType> = (props: ProfilePropsType) =>
-  {
-    if(props.profile) return (
+const Profile: React.FC<OwnProps> = (props) => {
+    const profile = useSelector((state: GlobalStateType) => state.profilePage.profile)
+    if(profile) return (
       <>
-      <ProfileInfo {...props} />
-      <MyPostsContainer/>
+      <ProfileInfo me={props.me} />
+      <MyPosts/>
     </>)
     else return <></>
 
