@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {AppDispatch, GlobalStateType} from "../../../redux/redux-state";
 import {useDispatch, useSelector} from "react-redux";
-import {sendMessage, startListening} from "../../../redux/chat-reducer";
+import {sendMessage, startListening, StatusType, stopListening} from "../../../redux/chat-reducer";
 
 type ChatMessageType = {
     userId: number
@@ -17,10 +17,11 @@ const ChatPage: React.FC = () => {
 }
 const Chat: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
-
        useEffect(() => {
-           console.log('useEffect')
            dispatch(startListening());
+           return ()=>{
+               dispatch(stopListening());
+           }
     }, [])
 
     return (
@@ -34,6 +35,13 @@ const Chat: React.FC = () => {
 const ChatMessages: React.FC = () => {
 
     const messages = useSelector((state: GlobalStateType)=> state.chatPage.messages)
+    useEffect(()=>{
+        setTimeout(()=>{
+            bottom.current?.scrollIntoView({behavior: 'smooth' })
+        }, 300)
+
+    }, [messages])
+    const bottom = useRef<HTMLDivElement>(null);
 
     return (
         <div style={{
@@ -45,6 +53,8 @@ const ChatMessages: React.FC = () => {
             overflow: 'auto'
         }}>
             {messages.map((item: ChatMessageType, index: number) => <Message message={item} key={index}/>)}
+        <div ref={bottom}></div>
+
         </div>
     )
 }
@@ -65,16 +75,25 @@ const AddChatMessageForm: React.FC = () => {
         setText('')
         dispatch(sendMessage(text));
     }
+    const statusFromReducer = useSelector((state: GlobalStateType)=>state.chatPage.status)
+    const [connectionStatus, setConnectionStatus] = useState<StatusType>()
+
+
+    useEffect(()=>{
+        setConnectionStatus(statusFromReducer)
+    }, [statusFromReducer])
+
     return (
         <div>
             <div>
                 <textarea value={text} onChange={(e) => setText(e.target.value)} name="ChatMessageText"></textarea>
             </div>
             <div>
-                <button disabled={false} onClick={OnSendMessage}
+                <button disabled={connectionStatus==='pending'} onClick={OnSendMessage}
                         style={{marginTop: 10}}>  Send
                 </button>
             </div>
+
         </div>
     )
 }

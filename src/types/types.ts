@@ -62,3 +62,4 @@ export type FilterType = {
     term: string,
     friend: null | boolean
 }
+

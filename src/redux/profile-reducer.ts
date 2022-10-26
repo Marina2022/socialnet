@@ -7,7 +7,7 @@ import {BaseThunkType, InferActions} from "./redux-state";
 const initialState = {
     posts: [
         {id: 1, message: "Life is very short and there's no time..", likesCount: 15},
-        {id: 2, message: "go to school", likesCount: 20},
+        {id: 2, message: "Yes yes yes", likesCount: 20},
         {id: 3, message: "What's going on?", likesCount: 5}
     ] as Array<PostType>,
     profile: null as ProfileType | null,

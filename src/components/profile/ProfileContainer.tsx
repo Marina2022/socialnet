@@ -19,7 +19,6 @@ const ProfileContainer: React.FC<OwnPropsType> = (props) => {
     const dispatch:AppDispatch = useDispatch();
     const isFetching = useSelector((state: GlobalStateType)=>state.profilePage.isFetching)
     useEffect(() => {
-        console.log('profile did mount')
         let userId = props.match.userId;
         if (!userId) userId = myUserId;
         if (!userId) {

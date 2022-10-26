@@ -1,3 +1,5 @@
+import {StatusType} from "../redux/chat-reducer";
+
 export type ChatMessageType = {
     userId: number
     userName: string
@@ -7,33 +9,66 @@ export type ChatMessageType = {
 
 let ws: WebSocket | null = null
 
-const createChannel = () => {
-    ws?.removeEventListener('close', closeWsHandler);
-    ws?.close();
-    ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
-    ws.addEventListener('close', closeWsHandler)
-}
-
 const closeWsHandler = () => {
-    createChannel();
+    setTimeout(createChannel, 3000);
+};
+
+const openWsHandler = () => {
+    subscribers.WsOpened.forEach(cb=>{
+        cb('ready');
+    })
 };
 
 const messageHandler = (e: MessageEvent) => {
     const newMessages = JSON.parse(e.data);
-    callbacks.forEach(callback => callback(newMessages));
+    subscribers.messagesReceived.forEach(callback => callback(newMessages));
 };
 
-const callbacks: Array<(messages: ChatMessageType[])=>void> = [];
+const cleanUp = () => {
+    ws?.removeEventListener('close', closeWsHandler);
+    ws?.removeEventListener('message', messageHandler);
+    ws?.removeEventListener('open', openWsHandler);
+}
+
+const createChannel = () => {
+    cleanUp();
+    ws?.close();
+    subscribers.WsOpened.forEach(cb=>{
+        cb('pending');
+    })
+    ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
+    ws.addEventListener('close', closeWsHandler);
+    ws.addEventListener('open', openWsHandler);
+    ws?.addEventListener('message', messageHandler);
+}
+
+let subscribers: {
+    messagesReceived: Array<(messages: ChatMessageType[])=>void>
+    WsOpened: Array<(status: StatusType)=>void>
+} = {messagesReceived: [], WsOpened: []}
+
+
+type SubscribeType = 'messagesReceived' | 'WsOpened'
 
 export const chatAPI =
     {
-        subscribe(callback: ((messages: ChatMessageType[])=> void)) {
-            callbacks.push(callback);
+        subscribe(type: SubscribeType, callback: (messages: any)=> void) {
+            // @ts-ignore
+            subscribers[type].push(callback);
+        },
+        unsubscribe(type: SubscribeType, callback: ((messages: any)=> void)) {
+            // @ts-ignore
+            subscribers[type] = subscribers[type].filter((item)=> item === callback);
         },
 
         start() {
             createChannel()
-            ws?.addEventListener('message', messageHandler)
+        },
+
+        stop() {
+            cleanUp()
+            ws?.close()
+
         },
 
         sendMessage(text: string) {
